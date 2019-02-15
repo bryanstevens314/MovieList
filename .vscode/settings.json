@@ -1,0 +1,6 @@
+{
+  "tslint.autoFixOnSave ": false,
+  "php.validate.run": "onType",
+  "editor.formatOnSave": false,
+  "javascript.format.enable": false
+}
