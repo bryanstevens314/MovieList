@@ -1,0 +1,14 @@
+/Users/bryanstevens/Documents/Sites/MovieList/server/bin/Debug/netcoreapp2.2/server.deps.json
+/Users/bryanstevens/Documents/Sites/MovieList/server/bin/Debug/netcoreapp2.2/server.runtimeconfig.json
+/Users/bryanstevens/Documents/Sites/MovieList/server/bin/Debug/netcoreapp2.2/server.runtimeconfig.dev.json
+/Users/bryanstevens/Documents/Sites/MovieList/server/bin/Debug/netcoreapp2.2/server.dll
+/Users/bryanstevens/Documents/Sites/MovieList/server/bin/Debug/netcoreapp2.2/server.pdb
+/Users/bryanstevens/Documents/Sites/MovieList/server/obj/Debug/netcoreapp2.2/server.csprojAssemblyReference.cache
+/Users/bryanstevens/Documents/Sites/MovieList/server/obj/Debug/netcoreapp2.2/server.csproj.CoreCompileInputs.cache
+/Users/bryanstevens/Documents/Sites/MovieList/server/obj/Debug/netcoreapp2.2/server.RazorAssemblyInfo.cache
+/Users/bryanstevens/Documents/Sites/MovieList/server/obj/Debug/netcoreapp2.2/server.RazorAssemblyInfo.cs
+/Users/bryanstevens/Documents/Sites/MovieList/server/obj/Debug/netcoreapp2.2/server.AssemblyInfoInputs.cache
+/Users/bryanstevens/Documents/Sites/MovieList/server/obj/Debug/netcoreapp2.2/server.AssemblyInfo.cs
+/Users/bryanstevens/Documents/Sites/MovieList/server/obj/Debug/netcoreapp2.2/server.RazorTargetAssemblyInfo.cache
+/Users/bryanstevens/Documents/Sites/MovieList/server/obj/Debug/netcoreapp2.2/server.dll
+/Users/bryanstevens/Documents/Sites/MovieList/server/obj/Debug/netcoreapp2.2/server.pdb
