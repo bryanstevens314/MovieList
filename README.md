@@ -1,6 +1,7 @@
 # MovieList
 
 Waffle.io: https://waffle.io/bryanstevens314/MovieList
+
 Database Models: https://docs.google.com/drawings/d/198KNfDDVeL89pI48J20X-AGQQSLiMvHsrq5vUQP1O5E/edit?usp=sharing
 
 ## Development server
