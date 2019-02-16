@@ -5,7 +5,7 @@
     "server":"cd server && dotnet run",
     "start-dev": "NODE_ENV='development' ng build && NODE_ENV='development' npm run server",
     "ng": "ng",
-    "start": "npm run server",
+    "start": "cd server && dotnet run",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
