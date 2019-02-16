@@ -1,6 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "noImplicitAny": true,
+    "noEmitOnError": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -18,5 +20,10 @@
       "es2018",
       "dom"
     ]
-  }
+  },
+  "files": [
+    "src/scripts/app.ts",
+    "src/main.ts",
+    "src/polyfills.ts"
+  ]
 }

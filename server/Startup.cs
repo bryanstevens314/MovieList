@@ -13,6 +13,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Data.SqlClient;
+using System.Data;
+// using MySql.Data;
+// using MySql.Data.MySqlClient;
 
 namespace server
 {
@@ -20,8 +24,55 @@ namespace server
     {
         public Startup(IConfiguration configuration)
         {
+
             Configuration = configuration;
+            try{
+                using(SqlConnection conn = new SqlConnection())
+                {
+                    conn.ConnectionString = "Server=65.52.125.99;Database=SQLdatabase;Uid=admin123;Pwd=Password123456789; Trusted_Connection=true";
+                    Console.WriteLine("Something went right");
+                }
+            }
+            catch{
+                Console.WriteLine("Something went wrong1");
+            }
+            // try{
+            //     using (SqlConnection connection = new SqlConnection(
+            //     "Integrated Security=SSPI;Initial Catalog=Northwind"))
+            //     {
+            //         connection.Open();
+            //         // Pool A is created.
+            //     }
+            // }
+            // catch{
+
+            // }
+
+            // try{
+            //     using (SqlConnection connection = new SqlConnection(
+            //     "Integrated Security=SSPI;Initial Catalog=pubs"))
+            //     {
+            //         connection.Open();
+            //         // Pool B is created because the connection strings differ.
+            //     }
+            // }
+            // catch{
+
+            // }
+
+            // try{
+            //     using (SqlConnection connection = new SqlConnection(
+            //     "Integrated Security=SSPI;Initial Catalog=Northwind"))
+            //     {
+            //         connection.Open();
+            //         // The connection string matches pool A.
+            //     }
+            // }
+            // catch{
+
+            // }
         }
+
 
         public IConfiguration Configuration { get; }
 
@@ -43,6 +94,7 @@ namespace server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -52,6 +104,27 @@ namespace server
             });
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            // using (SqlConnection connection = new SqlConnection(
+            // "Integrated Security=SSPI;Initial Catalog=Northwind"))
+            // {
+            //     connection.Open();
+            //     // Pool A is created.
+            // }
+
+            // using (SqlConnection connection = new SqlConnection(
+            // "Integrated Security=SSPI;Initial Catalog=pubs"))
+            // {
+            //     connection.Open();
+            //     // Pool B is created because the connection strings differ.
+            // }
+
+            // using (SqlConnection connection = new SqlConnection(
+            // "Integrated Security=SSPI;Initial Catalog=Northwind"))
+            // {
+            //     connection.Open();
+            //     // The connection string matches pool A.
+            // }
         }
     }
 }

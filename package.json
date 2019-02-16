@@ -2,7 +2,7 @@
   "name": "movie-list",
   "version": "0.0.0",
   "scripts": {
-    "server":"cd server && dotnet run",
+    "server": "cd server && dotnet run",
     "start-dev": "NODE_ENV='development' ng build && NODE_ENV='development' npm run server",
     "ng": "ng",
     "start": "ng serve",
@@ -27,6 +27,8 @@
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
+    "gulp": "3.9.0",
+    "del": "2.2.0",
     "@angular-devkit/build-angular": "~0.13.0",
     "@angular/cli": "~7.3.1",
     "@angular/compiler-cli": "~7.2.0",
