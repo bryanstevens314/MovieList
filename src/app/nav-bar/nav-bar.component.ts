@@ -8,6 +8,7 @@ import { Component,Output, EventEmitter } from '@angular/core';
 export class NavBarComponent {
 
   @Output() messageEvent = new EventEmitter<boolean>();
+
   CreateList():void{
 
   }
@@ -15,6 +16,7 @@ export class NavBarComponent {
   ViewLists():void{
 
   }
+
   Login():void{
     this.messageEvent.emit()
   }

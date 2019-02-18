@@ -1,0 +1,13 @@
+<input
+(keyup)='performSearch($event)'
+type="text"
+placeholder="Search..."
+ng-model="search"
+id="search"/>
+<div *ngIf="SearchResults" class="search_results">
+  <ul>
+      <li *ngFor="let element of SearchResults">
+        {{element.Title}}
+      </li>
+    </ul>
+</div>
