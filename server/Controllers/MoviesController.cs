@@ -13,12 +13,14 @@ namespace server.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        // GET api/movies/:{imdbID}
-        [HttpGet("{imdbID}")]
-        public ActionResult<string> Get(int id)
+
+        // GET api/movies/search/:{search}
+        [HttpGet("search/{search}")]
+        public ActionResult<string> Get(string search)
         {
             try {
 
+                return "";
             }catch(Exception ex){
 
                 Console.WriteLine("An error occured: " + ex.Message);
@@ -26,5 +28,6 @@ namespace server.Controllers
 
             }
         }
+
     }
 }

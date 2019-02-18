@@ -6,34 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using QC = System.Data.SqlClient;
 using DT = System.Data;
 using System.Data;
-
 namespace server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class CollectionsController : ControllerBase
     {
-
         // GET api/collections/:{userId}
         [HttpGet("{userId}")]
         public ActionResult<string> Get(int id)
         {
             try {
                 using (var connection = new QC.SqlConnection(
-                    "Server=tcp:moviedbserved.database.windows.net,1433;Initial Catalog=db;Persist Security Info=False;User ID=admin123;Password=Password123456789;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-                    ))
+                    "Server=tcp:moviedbserved.database.windows.net,1433;Initial Catalog=db;Persist Security Info=False;User ID=admin123;Password=Password123456789;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
                 {
                     connection.Open();
-                    QC.SqlParameter parameter;
                     using (var command = new QC.SqlCommand()){
-
                         command.Connection = connection;
                         command.CommandType = DT.CommandType.Text;
-                        command.CommandText = @"SELECT * FROM User_Movies WHERE uid = " + userId + ";";
+                        command.CommandText = @"SELECT * FROM User_Movies WHERE uid = " + id + ";";
                         QC.SqlDataReader reader = command.ExecuteReader();
                         while (reader.Read()){
-                            return reader.GetInt32(0) + " " + reader.GetString(1) + " " + reader.GetString(2) + " " + reader.GetString(3);
+
                         }
+                        return reader.GetInt32(0) + " " + reader.GetString(1) + " " + reader.GetString(2) + " " + reader.GetString(3);
                     }
                 }
             }catch(Exception ex){
@@ -86,7 +82,7 @@ namespace server.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<string> Delete(int id)
         {
             try {
                 using (var connection = new QC.SqlConnection(
@@ -94,14 +90,13 @@ namespace server.Controllers
                     ))
                 {
                     connection.Open();
-                    QC.SqlParameter parameter;
                     using (var command = new QC.SqlCommand()){
 
                         command.Connection = connection;
                         command.CommandType = DT.CommandType.Text;
                         command.CommandText = @"DELETE FROM User_Movies WHERE id = " + id + ";";
                         command.ExecuteNonQuery();
-
+                        return "";
                     }
                 }
             }catch(Exception ex){

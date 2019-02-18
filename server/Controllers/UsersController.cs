@@ -24,16 +24,13 @@ namespace server.Controllers
                     ))
                 {
                     connection.Open();
-                    QC.SqlParameter parameter;
                     using (var command = new QC.SqlCommand()){
 
                         command.Connection = connection;
                         command.CommandType = DT.CommandType.Text;
                         command.CommandText = @"SELECT * FROM Users WHERE id = " + id + ";";
                         QC.SqlDataReader reader = command.ExecuteReader();
-                        while (reader.Read()){
                             return reader.GetInt32(0) + " " + reader.GetString(1) + " " + reader.GetString(2) + " " + reader.GetString(3);
-                        }
                     }
                 }
             }catch(Exception ex){

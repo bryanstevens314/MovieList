@@ -1,18 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent {
 
-  constructor() { }
+  @Output() messageEvent = new EventEmitter<boolean>();
+  CreateList():void{
 
-  ngOnInit() {
   }
-  public onClick(){
-    console.log('HELLO WORLD!');
+
+  ViewLists():void{
+
+  }
+  Login():void{
+    this.messageEvent.emit()
   }
 
 }

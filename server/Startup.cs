@@ -26,51 +26,7 @@ namespace server
         {
 
             Configuration = configuration;
-            try{
-                using(SqlConnection conn = new SqlConnection())
-                {
-                    conn.ConnectionString = "Server=65.52.125.99;Database=SQLdatabase;Uid=admin123;Pwd=Password123456789; Trusted_Connection=true";
-                    Console.WriteLine("Something went right");
-                }
-            }
-            catch{
-                Console.WriteLine("Something went wrong1");
-            }
-            // try{
-            //     using (SqlConnection connection = new SqlConnection(
-            //     "Integrated Security=SSPI;Initial Catalog=Northwind"))
-            //     {
-            //         connection.Open();
-            //         // Pool A is created.
-            //     }
-            // }
-            // catch{
 
-            // }
-
-            // try{
-            //     using (SqlConnection connection = new SqlConnection(
-            //     "Integrated Security=SSPI;Initial Catalog=pubs"))
-            //     {
-            //         connection.Open();
-            //         // Pool B is created because the connection strings differ.
-            //     }
-            // }
-            // catch{
-
-            // }
-
-            // try{
-            //     using (SqlConnection connection = new SqlConnection(
-            //     "Integrated Security=SSPI;Initial Catalog=Northwind"))
-            //     {
-            //         connection.Open();
-            //         // The connection string matches pool A.
-            //     }
-            // }
-            // catch{
-
-            // }
         }
 
 
