@@ -12,9 +12,14 @@ namespace server.Controllers
     {
         // GET api/values
         [HttpGet]
-        public void Get()
+        public void Redirect1()
         {
             Response.Redirect ("index.html");
+        }
+        [HttpGet("index.html")]
+        public void Redirect2()
+        {
+            Response.Redirect ("https://localhost:5001/index.html");
         }
     }
 }
