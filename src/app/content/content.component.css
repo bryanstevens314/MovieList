@@ -1,0 +1,28 @@
+
+.content{
+  width: 73%;
+  height: 100vh;
+  float: right;
+  background-color: #121212;
+  text-align: center;
+}
+
+.login_signup{
+  top: 8px;
+  right: 0px;
+  position: fixed;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* float: right; */
+  width: 111px;
+  height: 34px;
+}
+
+.login_signup>p{
+  color: white;
+  padding-top: -9px;
+  margin-top: 8px;
+}

@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http;
 using Microsoft.AspNetCore.Mvc;
 using QC = System.Data.SqlClient;
 using DT = System.Data;
 using System.Data;
+using System.Web;
+using Microsoft.AspNetCore.Http;
+
 namespace server.Controllers
 {
     [Route("api/[controller]")]
@@ -40,10 +44,11 @@ namespace server.Controllers
             }
         }
 
-        // POST api/values
+        //POST api/collections
         [HttpPost]
-        public ActionResult<string> Post([FromBody] string value)
+        public string PostJsonString([FromBody] string list_name)
         {
+                 Console.WriteLine("Hello World!" + list_name);
              try {
                 using (var connection = new QC.SqlConnection(
                     "Server=tcp:moviedbserved.database.windows.net,1433;Initial Catalog=db;Persist Security Info=False;User ID=admin123;Password=Password123456789;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
@@ -54,23 +59,20 @@ namespace server.Controllers
                     {
                         command.Connection = connection;
                         command.CommandType = DT.CommandType.Text;
-                        command.CommandText = @"INSERT INTO User_Movies (list_name, imdbID, uid) VALUES (@list_name,@imdbID,@uid);";
+                        command.CommandText = @"INSERT INTO User_Movies (list_name, uid) OUTPUT INSERTED.Id VALUES (@list_name, @uid);";
 
                         parameter = new QC.SqlParameter("@list_name", DT.SqlDbType.NVarChar, 50);
-                        parameter.Value = "test";
+                        parameter.Value = list_name;
                         command.Parameters.Add(parameter);
 
-                        parameter = new QC.SqlParameter("@imdbID", DT.SqlDbType.NVarChar, 25);
-                        parameter.Value = "123";
+                        var uid = HttpContext.Session.GetString("uid");
+                        parameter = new QC.SqlParameter("@uid", DT.SqlDbType.NVarChar, 50);
+                        parameter.Value = uid;
                         command.Parameters.Add(parameter);
 
-                        parameter = new QC.SqlParameter("@uid", DT.SqlDbType.NVarChar, 25);
-                        parameter.Value = "Bryan Stevens";
-                        command.Parameters.Add(parameter);
-
-                        int productId = (int)command.ExecuteScalar();
-                        Console.WriteLine("The generated ProductID = {0}.", productId);
-                        return productId.ToString();
+                        int collectionId = (int)command.ExecuteScalar();
+                        Console.WriteLine("The generated collectionId = {0}.", collectionId);
+                        return collectionId.ToString();
                     }
                 }
             }catch(Exception ex){

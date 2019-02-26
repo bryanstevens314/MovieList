@@ -9,6 +9,8 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { HeroFormComponent } from './hero-form/hero-form.component';
 import { SearchComponent } from './search/search.component';
 import { ContentComponent } from './content/content.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { LoginSignupComponent } from './login-signup/login-signup.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { ContentComponent } from './content/content.component';
     NavBarComponent,
     HeroFormComponent,
     SearchComponent,
-    ContentComponent
+    ContentComponent,
+    SidebarComponent,
+    LoginSignupComponent
   ],
   imports: [
     BrowserModule,

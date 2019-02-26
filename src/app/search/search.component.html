@@ -1,13 +1,26 @@
 <input
-(keyup)='performSearch($event)'
+(keyup)='PerformSearch($event)'
 type="text"
 placeholder="Search..."
 ng-model="search"
 id="search"/>
-<div *ngIf="SearchResults" class="search_results">
-  <ul>
-      <li *ngFor="let element of SearchResults">
-        {{element.Title}}
-      </li>
-    </ul>
+
+<div *ngIf="DisplayCollections" class="collection_selection">
+  <p>Collections</p>
+  <div class="back" (click)="CloseCollections()">Return</div>
+  <hr/>
+  <div *ngFor="let element of Collections" class="collection_cells">
+    <input type="radio" name="list" value={{element.list_name}}> {{element.list_name}}}
+  </div>
+  <div class="save_collection" (click)="SaveCollection()">Save</div>
+</div>
+
+<div *ngIf="SearchResults.length > 0" class="search_results">
+
+  <div class="search_results">
+      <div *ngFor="let element of SearchResults" class="search_cell" (click)="MovieClicked(element.imdbID)">
+        <img src={{element.Poster}}>
+        <p>{{element.Title}}</p>
+      </div>
+  </div>
 </div>

@@ -1,10 +1,8 @@
-<div class="main">
-    <app-nav-bar (messageEvent)="receiveMessage()"></app-nav-bar>
-    <div class="content">
-        <app-hero-form *ngIf = "DisplayLogin"></app-hero-form>
-        <app-search *ngIf="!DisplayLogin"></app-search>
-        <app-content *ngIf = "!DisplayLogin"></app-content>
-    </div>
-</div>
+<div *ngIf = "!DisplayLogin" class="main" (click)="Clicked()">
+    <app-sidebar ></app-sidebar>
+    <app-content ></app-content>
 
-<router-outlet></router-outlet>
+</div>
+<app-login-signup *ngIf = "DisplayLogin"></app-login-signup>
+
+<!-- <router-outlet></router-outlet> -->

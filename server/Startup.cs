@@ -15,8 +15,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Data.SqlClient;
 using System.Data;
-// using MySql.Data;
-// using MySql.Data.MySqlClient;
 
 namespace server
 {
@@ -24,9 +22,7 @@ namespace server
     {
         public Startup(IConfiguration configuration)
         {
-
             Configuration = configuration;
-
         }
 
 
@@ -36,6 +32,14 @@ namespace server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,29 +62,10 @@ namespace server
                     Path.Combine(Directory.GetCurrentDirectory(), "../dist/MovieList")),
                 RequestPath = ""
             });
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseMvc();
 
-            // using (SqlConnection connection = new SqlConnection(
-            // "Integrated Security=SSPI;Initial Catalog=Northwind"))
-            // {
-            //     connection.Open();
-            //     // Pool A is created.
-            // }
-
-            // using (SqlConnection connection = new SqlConnection(
-            // "Integrated Security=SSPI;Initial Catalog=pubs"))
-            // {
-            //     connection.Open();
-            //     // Pool B is created because the connection strings differ.
-            // }
-
-            // using (SqlConnection connection = new SqlConnection(
-            // "Integrated Security=SSPI;Initial Catalog=Northwind"))
-            // {
-            //     connection.Open();
-            //     // The connection string matches pool A.
-            // }
         }
     }
 }

@@ -1,0 +1,55 @@
+.side_bar{
+  background-color:#222222;
+  position: fixed;
+  top:0px;
+  width:27%;
+  height:100%;
+}
+
+.head{
+
+  background-color:#E2E2E2;
+  position: fixed;
+  width:27%;
+  height:50px;
+}
+
+.head > p{
+  user-select: none;
+  display: inline-block;
+}
+
+.collection{
+  color: #222222;
+  float: left;
+  font-size: 28px;
+  margin-top: 9px;
+  margin-left: 10px;
+}
+
+.collections{
+  width:100%;
+  margin-top: 65px;
+}
+
+.collections_cell{
+  border-radius: 0px 32px 32px 0px;
+  margin-top: 3px;
+  width: 97%;
+  height: 35px;
+  background-color: white;
+}
+
+.collections_cell > input{
+  float: left;
+  height: 33px;
+  width: 285px;
+  border: none;
+}
+.add_collections{
+  float: right;
+  margin-right: 12px;
+  font-size: 40px;
+  margin-top: 0px;
+  cursor:pointer;
+}
