@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-
+import {AppComponent} from '../app.component';
 
 @Component({
   selector: 'app-content',
@@ -9,11 +9,14 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 export class ContentComponent {
 
-  constructor() { }
+  constructor(private comp: AppComponent) { }
   title = 'World';
-
+  @Input() public LoggedIn: boolean;
   Login() {
-    console.log('HERE');
+    this.comp.ReceiveMessage();
+  }
+  Logout() {
+    this.comp.Logout();
   }
 
 }

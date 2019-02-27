@@ -1,6 +1,6 @@
 <div *ngIf = "!DisplayLogin" class="main" (click)="Clicked()">
     <app-sidebar ></app-sidebar>
-    <app-content ></app-content>
+    <app-content [LoggedIn]="LoggedIn"></app-content>
 
 </div>
 <app-login-signup *ngIf = "DisplayLogin"></app-login-signup>

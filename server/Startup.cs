@@ -33,7 +33,11 @@ namespace server
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDistributedMemoryCache();
-
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+            // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            options.CheckConsentNeeded = context => false;
+            });
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.

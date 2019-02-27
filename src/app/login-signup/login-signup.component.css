@@ -1,5 +1,6 @@
 .login_page{
   background-color:#121212;
+  position: fixed;
   width:100vw;
   height:100vh;
 

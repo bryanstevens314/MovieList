@@ -26,3 +26,22 @@
   padding-top: -9px;
   margin-top: 8px;
 }
+.logout{
+  top: 8px;
+  right: 0px;
+  position: fixed;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* float: right; */
+  width: 111px;
+  height: 34px;
+}
+
+.logout>p{
+  color: white;
+  padding-top: -9px;
+  margin-top: 8px;
+}

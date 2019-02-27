@@ -1,8 +1,11 @@
 
 <div class="content">
 
-    <app-search *ngIf="!DisplayLogin" ></app-search>
-    <div class="login_signup" (click)='Login()'>
+    <app-search ></app-search>
+    <div class="login_signup" (click)='Login()' *ngIf="!LoggedIn" >
         <p>Login/ SignUp</p>
+    </div>
+    <div class="logout" (click)='Logout()' *ngIf="LoggedIn" >
+        <p>Logout</p>
     </div>
 </div>

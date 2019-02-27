@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {AppComponent} from '../app.component';
-import axios from 'axios';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,8 +17,6 @@ export class SidebarComponent implements OnInit {
     });
   }
   CreateCollection(event) {
-    axios.post('api/collections', {
-      list_name: event.target.value
-    });
+    this.comp.CreateCollection(event.target.value);
   }
 }

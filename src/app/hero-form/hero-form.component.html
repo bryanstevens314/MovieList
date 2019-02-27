@@ -1,16 +1,17 @@
-<div class="container">
-    <form (ngSubmit)="onSubmit($event)" #f="ngForm" #heroForm="ngForm">
+<div class="container" >
+    <form #f="ngForm" #heroForm="ngForm">
       <div class="form-group">
         <label for="name">Email</label>
-        <input type="text" class="form-control" ng-model="email" id="email" required>
+        <input type="text" class="form-control" ng-model="email" id="email" (keyup)='EmailChanged($event)' required>
       </div>
 
       <div class="form-group">
         <label for="alterEgo">Password</label>
-        <input type="text" class="form-control" ng-model="pass" id="pass">
+        <input type="text" class="form-control" ng-model="pass" id="pass" (keyup)='PassChanged($event)'>
       </div>
 
-      <button type="submit" class="btn btn-success">Submit</button>
+      <button type="submit" (click)="Signup($event)">Sign Up</button>
+      <button type="submit" (click)="Login($event)">Login</button>
 
     </form>
 </div>

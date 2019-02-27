@@ -18,7 +18,7 @@ namespace server.Controllers
     {
         // GET api/collections/:{userId}
         [HttpGet("{userId}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<object> Get(int id)
         {
             try {
                 using (var connection = new QC.SqlConnection(
@@ -28,10 +28,16 @@ namespace server.Controllers
                     using (var command = new QC.SqlCommand()){
                         command.Connection = connection;
                         command.CommandType = DT.CommandType.Text;
-                        command.CommandText = @"SELECT * FROM User_Movies WHERE uid = " + id + ";";
+                        command.CommandText = @"SELECT * FROM User_Movies WHERE uid = @uid;";
+                        string uid = HttpContext.Session.GetString("uid");
+                        command.Parameters.AddWithValue("@uid", uid);
                         QC.SqlDataReader reader = command.ExecuteReader();
+                        object temp = new object();
                         while (reader.Read()){
-
+                            int ID = reader.GetInt32(0);
+                            string list_name = reader.GetString(1);
+                            string imdbID = reader.GetString(0);
+                            string uid1 = reader.GetString(0);
                         }
                         return reader.GetInt32(0) + " " + reader.GetString(1) + " " + reader.GetString(2) + " " + reader.GetString(3);
                     }
@@ -46,9 +52,8 @@ namespace server.Controllers
 
         //POST api/collections
         [HttpPost]
-        public string PostJsonString([FromBody] string list_name)
+        public bool PostJsonString(string list_name)
         {
-                 Console.WriteLine("Hello World!" + list_name);
              try {
                 using (var connection = new QC.SqlConnection(
                     "Server=tcp:moviedbserved.database.windows.net,1433;Initial Catalog=db;Persist Security Info=False;User ID=admin123;Password=Password123456789;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
@@ -59,26 +64,24 @@ namespace server.Controllers
                     {
                         command.Connection = connection;
                         command.CommandType = DT.CommandType.Text;
-                        command.CommandText = @"INSERT INTO User_Movies (list_name, uid) OUTPUT INSERTED.Id VALUES (@list_name, @uid);";
+                        command.CommandText = @"INSERT INTO User_Movies (list_name, uid) VALUES (@list_name, @uid);";
 
                         parameter = new QC.SqlParameter("@list_name", DT.SqlDbType.NVarChar, 50);
                         parameter.Value = list_name;
                         command.Parameters.Add(parameter);
 
-                        var uid = HttpContext.Session.GetString("uid");
+                        string uid = HttpContext.Session.GetString("uid");
                         parameter = new QC.SqlParameter("@uid", DT.SqlDbType.NVarChar, 50);
                         parameter.Value = uid;
                         command.Parameters.Add(parameter);
 
-                        int collectionId = (int)command.ExecuteScalar();
-                        Console.WriteLine("The generated collectionId = {0}.", collectionId);
-                        return collectionId.ToString();
+                        return true;
                     }
                 }
             }catch(Exception ex){
 
                 Console.WriteLine("An error occured: " + ex.Message);
-                return ex.Message;
+                return false;
             }
         }
 
