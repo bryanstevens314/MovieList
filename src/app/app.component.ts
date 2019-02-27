@@ -12,12 +12,12 @@ export class AppComponent implements OnInit {
   private accessPointUrl = 'https://localhost:5001/api/users';
   private collectionUrl = 'https://localhost:5001/api/collections';
   constructor(private SearchComp: SearchComponent, private http: HttpClient) {}
-  Collections = [];
+  Collections = {};
   SearchResults;
   DisplayLogin = false;
   LoggedIn = false;
   error;
-  async ngOnInit() {
+  ngOnInit() {
     try {
       this.http.get(
         this.accessPointUrl,
@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
           console.log(result);
           if (result === true) {
             this.LoggedIn = true;
+            this.RetrieveCollections();
           } else {
             this.error = "Incorrect Email or Password."
           }
@@ -35,6 +36,21 @@ export class AppComponent implements OnInit {
       console.log(err);
     }
   }
+  RetrieveCollections() {
+    try {
+      this.http.get(
+        this.collectionUrl,
+        {headers: {'Content-Type': 'application/json'}}).subscribe(
+        result => {
+          console.log('INSIDE RESULTS ', result);
+          this.Collections = result;
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   ReceiveMessage() {
     {this.DisplayLogin ? this.DisplayLogin = false : this.DisplayLogin = true; }
   }
@@ -57,14 +73,16 @@ export class AppComponent implements OnInit {
       console.log(err);
     }
   }
-  CreateCollection(list_name){
+  CreateCollection(list_name) {
     try {
       this.http.post(
         this.collectionUrl,
         JSON.stringify(list_name),
         {headers: {'Content-Type': 'application/json'}}).subscribe(
         result => {
-          this.LoggedIn = false;
+          if (result === true) {
+            this.RetrieveCollections();
+          }
         }
       );
     } catch (err) {

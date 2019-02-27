@@ -65,4 +65,5 @@ input{
   padding-top: 9px;
   text-align: center;
   float: center;
+  position: fixed;
 }

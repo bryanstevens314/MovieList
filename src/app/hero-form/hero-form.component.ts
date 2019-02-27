@@ -51,6 +51,7 @@ export class HeroFormComponent {
           if (result === true) {
             this.comp.DisplayLogin = false;
             this.comp.LoggedIn = true;
+            this.comp.RetrieveCollections();
           } else {
             this.comp.error = 'Incorrect Email or Password.';
           }

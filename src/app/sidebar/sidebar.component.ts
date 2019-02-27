@@ -8,15 +8,17 @@ import {AppComponent} from '../app.component';
 })
 
 export class SidebarComponent implements OnInit {
-  Collections = [];
+  @Input() public Collections: object;
+  AddingCollection = false;
   constructor(private comp: AppComponent) { }
   ngOnInit() { }
   AddCollection() {
-    this.Collections.push({
-      list_name: null
-    });
+    this.Collections[''] = '';
   }
   CreateCollection(event) {
     this.comp.CreateCollection(event.target.value);
+  }
+  keys() : Array<string> {
+    return Object.keys(this.Collections);
   }
 }

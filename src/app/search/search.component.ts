@@ -1,6 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import axios from 'axios';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -9,9 +8,12 @@ import axios from 'axios';
 export class SearchComponent {
 
   constructor(private httpClient: HttpClient) {}
-  SearchResults = [];
-  Collections = [];
+  @Input() public Collections: boolean;
   DisplayCollections = false;
+  SearchResults = [];
+  keys(): Array<string> {
+    return Object.keys(this.Collections);
+  }
   PerformSearch(form) {
     try {
       this.httpClient.get('https://www.omdbapi.com/?apikey=6c3999b3&s=' + form.target.value).subscribe((res?: any) => {
@@ -32,21 +34,10 @@ export class SearchComponent {
   ClearSearch() {
     this.SearchResults = [];
   }
-  async SaveCollection(list_name, imdbID) {
-    try {
-      const response = await axios.post('api/collections', {
-        list_name,
-        uid: 0,
-        imdbID
-      });
-      if (response) {
-        this.DisplayCollections = false;
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  SaveCollection(event) {
+    console.log(event);
   }
-  CloseCollections(){
+  CloseCollections() {
     this.DisplayCollections = false;
   }
 }

@@ -4,9 +4,9 @@
     <p class="add_collections" (click)='AddCollection()'>+</p>
   </div>
   <div *ngIf="Collections" class="collections">
-    <div *ngFor="let element of Collections" class="collections_cell">
-      <input *ngIf="!element.list_name" type="text" (keyup.enter)='CreateCollection($event)' autofocus="autofocus">
-      <p *ngIf="element.list_name">{{element.list_name}}</p>
+    <div *ngFor="let key of keys()" class="collections_cell">
+      <input *ngIf="!key" type="text" (keyup.enter)='CreateCollection($event)' autofocus="autofocus">
+      <p *ngIf="key">{{key}}</p>
 
     </div>
   </div>

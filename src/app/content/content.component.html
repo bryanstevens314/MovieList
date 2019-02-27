@@ -1,7 +1,7 @@
 
 <div class="content">
 
-    <app-search ></app-search>
+    <app-search [Collections] = "Collections"></app-search>
     <div class="login_signup" (click)='Login()' *ngIf="!LoggedIn" >
         <p>Login/ SignUp</p>
     </div>

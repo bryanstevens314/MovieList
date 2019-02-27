@@ -74,7 +74,7 @@ module.exports = "\n.main{\n\n  text-align:center;\n}\n\n\n\n\n\n/*# sourceMappi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf = \"!DisplayLogin\" class=\"main\" (click)=\"Clicked()\">\n    <app-sidebar ></app-sidebar>\n    <app-content [LoggedIn]=\"LoggedIn\"></app-content>\n\n</div>\n<app-login-signup *ngIf = \"DisplayLogin\"></app-login-signup>\n\n<!-- <router-outlet></router-outlet> -->\n"
+module.exports = "<div *ngIf = \"!DisplayLogin\" class=\"main\" (click)=\"Clicked()\">\n    <app-sidebar [Collections] = \"Collections\"></app-sidebar>\n    <app-content [LoggedIn]=\"LoggedIn\" [Collections] = \"Collections\"></app-content>\n\n</div>\n<app-login-signup *ngIf = \"DisplayLogin\"></app-login-signup>\n\n<!-- <router-outlet></router-outlet> -->\n"
 
 /***/ }),
 
@@ -101,31 +101,40 @@ var AppComponent = /** @class */ (function () {
         this.SearchComp = SearchComp;
         this.http = http;
         this.accessPointUrl = 'https://localhost:5001/api/users';
-        this.Collections = [];
+        this.collectionUrl = 'https://localhost:5001/api/collections';
+        this.Collections = {};
         this.DisplayLogin = false;
         this.LoggedIn = false;
     }
     AppComponent.prototype.ngOnInit = function () {
-        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var _this = this;
-            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
-                try {
-                    this.http.get(this.accessPointUrl, { headers: { 'Content-Type': 'application/json' } }).subscribe(function (result) {
-                        console.log(result);
-                        if (result === true) {
-                            _this.LoggedIn = true;
-                        }
-                        else {
-                            _this.error = "Incorrect Email or Password.";
-                        }
-                    });
+        var _this = this;
+        try {
+            this.http.get(this.accessPointUrl, { headers: { 'Content-Type': 'application/json' } }).subscribe(function (result) {
+                console.log(result);
+                if (result === true) {
+                    _this.LoggedIn = true;
+                    _this.RetrieveCollections();
                 }
-                catch (err) {
-                    console.log(err);
+                else {
+                    _this.error = "Incorrect Email or Password.";
                 }
-                return [2 /*return*/];
             });
-        });
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+    AppComponent.prototype.RetrieveCollections = function () {
+        var _this = this;
+        try {
+            this.http.get(this.collectionUrl, { headers: { 'Content-Type': 'application/json' } }).subscribe(function (result) {
+                console.log('INSIDE RESULTS ', result);
+                _this.Collections = result;
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
     };
     AppComponent.prototype.ReceiveMessage = function () {
         {
@@ -143,6 +152,19 @@ var AppComponent = /** @class */ (function () {
         try {
             this.http.delete(this.accessPointUrl, { headers: { 'Content-Type': 'application/json' } }).subscribe(function (result) {
                 _this.LoggedIn = false;
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+    AppComponent.prototype.CreateCollection = function (list_name) {
+        var _this = this;
+        try {
+            this.http.post(this.collectionUrl, JSON.stringify(list_name), { headers: { 'Content-Type': 'application/json' } }).subscribe(function (result) {
+                if (result === true) {
+                    _this.RetrieveCollections();
+                }
             });
         }
         catch (err) {
@@ -250,7 +272,7 @@ module.exports = "\n.content{\n  width: 73%;\n  height: 100vh;\n  float: right;\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"content\">\n\n    <app-search ></app-search>\n    <div class=\"login_signup\" (click)='Login()' *ngIf=\"!LoggedIn\" >\n        <p>Login/ SignUp</p>\n    </div>\n    <div class=\"logout\" (click)='Logout()' *ngIf=\"LoggedIn\" >\n        <p>Logout</p>\n    </div>\n</div>\n"
+module.exports = "\n<div class=\"content\">\n\n    <app-search [Collections] = \"Collections\"></app-search>\n    <div class=\"login_signup\" (click)='Login()' *ngIf=\"!LoggedIn\" >\n        <p>Login/ SignUp</p>\n    </div>\n    <div class=\"logout\" (click)='Logout()' *ngIf=\"LoggedIn\" >\n        <p>Logout</p>\n    </div>\n</div>\n"
 
 /***/ }),
 
@@ -285,6 +307,10 @@ var ContentComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
     ], ContentComponent.prototype, "LoggedIn", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], ContentComponent.prototype, "Collections", void 0);
     ContentComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-content',
@@ -380,6 +406,7 @@ var HeroFormComponent = /** @class */ (function () {
                 if (result === true) {
                     _this.comp.DisplayLogin = false;
                     _this.comp.LoggedIn = true;
+                    _this.comp.RetrieveCollections();
                 }
                 else {
                     _this.comp.error = 'Incorrect Email or Password.';
@@ -550,7 +577,7 @@ module.exports = "input{\n  cursor: pointer;\n  width: 450px;\n  height: 25px;\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<input\n(keyup)='PerformSearch($event)'\ntype=\"text\"\nplaceholder=\"Search...\"\nng-model=\"search\"\nid=\"search\"/>\n\n<div *ngIf=\"DisplayCollections\" class=\"collection_selection\">\n  <p>Collections</p>\n  <div class=\"back\" (click)=\"CloseCollections()\">Return</div>\n  <hr/>\n  <div *ngFor=\"let element of Collections\" class=\"collection_cells\">\n    <input type=\"radio\" name=\"list\" value={{element.list_name}}> {{element.list_name}}}\n  </div>\n  <div class=\"save_collection\" (click)=\"SaveCollection()\">Save</div>\n</div>\n\n<div *ngIf=\"SearchResults.length > 0\" class=\"search_results\">\n\n  <div class=\"search_results\">\n      <div *ngFor=\"let element of SearchResults\" class=\"search_cell\" (click)=\"MovieClicked(element.imdbID)\">\n        <img src={{element.Poster}}>\n        <p>{{element.Title}}</p>\n      </div>\n  </div>\n</div>\n"
+module.exports = "<input\n(keyup)='PerformSearch($event)'\ntype=\"text\"\nplaceholder=\"Search...\"\nng-model=\"search\"\nid=\"search\"/>\n\n<div *ngIf=\"DisplayCollections\" class=\"collection_selection\">\n  <p>Collections</p>\n  <div class=\"back\" (click)=\"CloseCollections()\">Return</div>\n  <hr/>\n\n  <div *ngFor=\"let key of keys()\" class=\"collection_cells\">\n    <input type=\"radio\" name=\"list\" value={{element.list_name}}> {{key}}}\n  </div>\n  <div class=\"save_collection\" (click)=\"SaveCollection()\">Save</div>\n</div>\n\n<div *ngIf=\"SearchResults.length > 0\" class=\"search_results\">\n\n  <div class=\"search_results\">\n      <div *ngFor=\"let element of SearchResults\" class=\"search_cell\" (click)=\"MovieClicked(element.imdbID)\">\n        <img src={{element.Poster}}>\n        <p>{{element.Title}}</p>\n      </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -577,7 +604,6 @@ var SearchComponent = /** @class */ (function () {
     function SearchComponent(httpClient) {
         this.httpClient = httpClient;
         this.SearchResults = [];
-        this.Collections = [];
         this.DisplayCollections = false;
     }
     SearchComponent.prototype.PerformSearch = function (form) {
@@ -633,6 +659,13 @@ var SearchComponent = /** @class */ (function () {
     SearchComponent.prototype.CloseCollections = function () {
         this.DisplayCollections = false;
     };
+    SearchComponent.prototype.keys = function () {
+        return Object.keys(this.Collections);
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], SearchComponent.prototype, "Collections", void 0);
     SearchComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-search',
@@ -666,7 +699,7 @@ module.exports = ".side_bar{\n  background-color:#222222;\n  position: fixed;\n 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"side_bar\">\n  <div class=\"head\">\n    <p class=\"collection\">Collections</p>\n    <p class=\"add_collections\" (click)='AddCollection()'>+</p>\n  </div>\n  <div *ngIf=\"Collections\" class=\"collections\">\n    <div *ngFor=\"let element of Collections\" class=\"collections_cell\">\n      <input *ngIf=\"!element.list_name\" type=\"text\" (keyup.enter)='CreateCollection($event)' autofocus=\"autofocus\">\n      <p *ngIf=\"element.list_name\">{{element.list_name}}</p>\n\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"side_bar\">\n  <div class=\"head\">\n    <p class=\"collection\">Collections</p>\n    <p class=\"add_collections\" (click)='AddCollection()'>+</p>\n  </div>\n  <div *ngIf=\"Collections\" class=\"collections\">\n    <div *ngFor=\"let key of keys()\" class=\"collections_cell\">\n      <input *ngIf=\"!key\" type=\"text\" (keyup.enter)='CreateCollection($event)' autofocus=\"autofocus\">\n      <p *ngIf=\"key\">{{key}}</p>\n\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -683,28 +716,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../app.component */ "./src/app/app.component.ts");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
-
 
 
 
 var SidebarComponent = /** @class */ (function () {
     function SidebarComponent(comp) {
         this.comp = comp;
-        this.Collections = [];
+        this.AddingCollection = false;
     }
     SidebarComponent.prototype.ngOnInit = function () { };
     SidebarComponent.prototype.AddCollection = function () {
-        this.Collections.push({
-            list_name: null
-        });
+        this.Collections[''] = '';
     };
     SidebarComponent.prototype.CreateCollection = function (event) {
-        axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('api/collections', {
-            list_name: event.target.value
-        });
+        this.comp.CreateCollection(event.target.value);
     };
+    SidebarComponent.prototype.keys = function () {
+        return Object.keys(this.Collections);
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
+    ], SidebarComponent.prototype, "Collections", void 0);
     SidebarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-sidebar',
