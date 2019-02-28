@@ -9,15 +9,14 @@ export class SearchComponent {
 
   constructor(private httpClient: HttpClient) {}
   @Input() public Collections: boolean;
-  DisplayCollections = false;
-  SearchResults = [];
+  SelectedMovie;
+  SearchResults;
   keys(): Array<string> {
     return Object.keys(this.Collections);
   }
   PerformSearch(form) {
     try {
       this.httpClient.get('https://www.omdbapi.com/?apikey=6c3999b3&s=' + form.target.value).subscribe((res?: any) => {
-        console.log(res);
         if (res.Search) {
           this.SearchResults = res.Search;
         } else {
@@ -29,15 +28,16 @@ export class SearchComponent {
     }
   }
   MovieClicked(id) {
-    this.DisplayCollections = true;
+    this.SelectedMovie = id;
   }
   ClearSearch() {
-    this.SearchResults = [];
+    this.SearchResults = null;
   }
   SaveCollection(event) {
+    this.SelectedMovie = null;
     console.log(event);
   }
   CloseCollections() {
-    this.DisplayCollections = false;
+    this.SelectedMovie = null;
   }
 }

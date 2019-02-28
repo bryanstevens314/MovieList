@@ -577,7 +577,7 @@ module.exports = "input{\n  cursor: pointer;\n  width: 450px;\n  height: 25px;\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<input\n(keyup)='PerformSearch($event)'\ntype=\"text\"\nplaceholder=\"Search...\"\nng-model=\"search\"\nid=\"search\"/>\n\n<div *ngIf=\"DisplayCollections\" class=\"collection_selection\">\n  <p>Collections</p>\n  <div class=\"back\" (click)=\"CloseCollections()\">Return</div>\n  <hr/>\n\n  <div *ngFor=\"let key of keys()\" class=\"collection_cells\">\n    <input type=\"radio\" name=\"list\" value={{element.list_name}}> {{key}}}\n  </div>\n  <div class=\"save_collection\" (click)=\"SaveCollection()\">Save</div>\n</div>\n\n<div *ngIf=\"SearchResults.length > 0\" class=\"search_results\">\n\n  <div class=\"search_results\">\n      <div *ngFor=\"let element of SearchResults\" class=\"search_cell\" (click)=\"MovieClicked(element.imdbID)\">\n        <img src={{element.Poster}}>\n        <p>{{element.Title}}</p>\n      </div>\n  </div>\n</div>\n"
+module.exports = "<input\n(keyup)='PerformSearch($event)'\ntype=\"text\"\nplaceholder=\"Search...\"\nng-model=\"search\"\nid=\"search\"/>\n\n<form *ngIf=\"SelectedMovie\" (ngSubmit)=\"SaveCollection($event)\" class=\"collection_selection\">\n  <p>Collections</p>\n  <div class=\"back\" (click)=\"CloseCollections()\">Return</div>\n  <hr/>\n\n  <div *ngFor=\"let key of keys()\" class=\"collection_cells\">\n    <input type=\"checkbox\" name=\"key\" value=\"key\" ()=\"\"><label>{{key}}</label>\n  </div>\n  <button type=\"submit\" class=\"save_collection\">Save</button>\n</form>\n\n<div *ngIf=\"SearchResults\" class=\"search_results\">\n\n  <div class=\"search_results\">\n      <div *ngFor=\"let element of SearchResults\" class=\"search_cell\" (click)=\"MovieClicked(element.imdbID)\">\n        <img src={{element.Poster}}>\n        <p>{{element.Title}}</p>\n      </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -594,23 +594,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
-
 
 
 
 var SearchComponent = /** @class */ (function () {
     function SearchComponent(httpClient) {
         this.httpClient = httpClient;
-        this.SearchResults = [];
-        this.DisplayCollections = false;
     }
+    SearchComponent.prototype.keys = function () {
+        return Object.keys(this.Collections);
+    };
     SearchComponent.prototype.PerformSearch = function (form) {
         var _this = this;
         try {
             this.httpClient.get('https://www.omdbapi.com/?apikey=6c3999b3&s=' + form.target.value).subscribe(function (res) {
-                console.log(res);
                 if (res.Search) {
                     _this.SearchResults = res.Search;
                 }
@@ -624,43 +621,17 @@ var SearchComponent = /** @class */ (function () {
         }
     };
     SearchComponent.prototype.MovieClicked = function (id) {
-        this.DisplayCollections = true;
+        this.SelectedMovie = id;
     };
     SearchComponent.prototype.ClearSearch = function () {
-        this.SearchResults = [];
+        this.SearchResults = null;
     };
-    SearchComponent.prototype.SaveCollection = function (list_name, imdbID) {
-        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
-            var response, err_1;
-            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('api/collections', {
-                                list_name: list_name,
-                                uid: 0,
-                                imdbID: imdbID
-                            })];
-                    case 1:
-                        response = _a.sent();
-                        if (response) {
-                            this.DisplayCollections = false;
-                        }
-                        return [3 /*break*/, 3];
-                    case 2:
-                        err_1 = _a.sent();
-                        console.log(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
+    SearchComponent.prototype.SaveCollection = function (event) {
+        this.SelectedMovie = null;
+        console.log(event);
     };
     SearchComponent.prototype.CloseCollections = function () {
-        this.DisplayCollections = false;
-    };
-    SearchComponent.prototype.keys = function () {
-        return Object.keys(this.Collections);
+        this.SelectedMovie = null;
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),

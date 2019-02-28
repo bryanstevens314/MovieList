@@ -5,18 +5,18 @@ placeholder="Search..."
 ng-model="search"
 id="search"/>
 
-<form submit="SaveCollection($event)" *ngIf="DisplayCollections" class="collection_selection">
+<form *ngIf="SelectedMovie" (ngSubmit)="SaveCollection($event)" class="collection_selection">
   <p>Collections</p>
   <div class="back" (click)="CloseCollections()">Return</div>
   <hr/>
 
   <div *ngFor="let key of keys()" class="collection_cells">
-    <input type="radio" name="list" value={{element.list_name}} value="key">
+    <input type="checkbox" name="key" value="key" ()=""><label>{{key}}</label>
   </div>
   <button type="submit" class="save_collection">Save</button>
 </form>
 
-<div *ngIf="SearchResults.length > 0" class="search_results">
+<div *ngIf="SearchResults" class="search_results">
 
   <div class="search_results">
       <div *ngFor="let element of SearchResults" class="search_cell" (click)="MovieClicked(element.imdbID)">
