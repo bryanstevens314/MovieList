@@ -9,8 +9,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent implements OnInit {
 
-  private accessPointUrl = 'https://localhost:5001/api/users';
-  private collectionUrl = 'https://localhost:5001/api/collections';
+  private accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
+  private collectionUrl = 'https://myfavemovies.herokuapp.com/api/collections';
   constructor(private SearchComp: SearchComponent, private http: HttpClient) {}
   Collections = {};
   SearchResults;
