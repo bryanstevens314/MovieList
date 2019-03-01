@@ -100,8 +100,8 @@ var AppComponent = /** @class */ (function () {
     function AppComponent(SearchComp, http) {
         this.SearchComp = SearchComp;
         this.http = http;
-        this.accessPointUrl = 'https://localhost:5001/api/users';
-        this.collectionUrl = 'https://localhost:5001/api/collections';
+        this.accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
+        this.collectionUrl = 'https://myfavemovies.herokuapp.com/api/collections';
         this.Collections = {};
         this.DisplayLogin = false;
         this.LoggedIn = false;
@@ -403,7 +403,7 @@ var HeroFormComponent = /** @class */ (function () {
     function HeroFormComponent(comp, http) {
         this.comp = comp;
         this.http = http;
-        this.accessPointUrl = 'https://localhost:5001/api/users';
+        this.accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
         this.Email = '';
         this.Pass = '';
     }

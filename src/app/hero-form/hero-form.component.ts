@@ -9,7 +9,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class HeroFormComponent {
   constructor(private comp: AppComponent, private http: HttpClient) {}
-  private accessPointUrl = 'https://localhost:5001/api/users';
   Email = '';
   Pass = '';
 
