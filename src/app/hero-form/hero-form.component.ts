@@ -8,9 +8,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrls: ['./hero-form.component.css']
 })
 export class HeroFormComponent {
-
-  private accessPointUrl = 'https://localhost:5001/api/users';
   constructor(private comp: AppComponent, private http: HttpClient) {}
+  private accessPointUrl = 'https://localhost:5001/api/users';
   Email = '';
   Pass = '';
 
@@ -21,46 +20,9 @@ export class HeroFormComponent {
     this.Pass = event.target.value;
   }
   Signup() {
-    try {
-      const payload = this.Email + '?' + this.Pass;
-      this.http.post(
-        this.accessPointUrl,
-        JSON.stringify(payload),
-        {headers: {'Content-Type': 'application/json'}}).subscribe(
-        result => {
-          if (result === true) {
-            this.comp.DisplayLogin = false;
-            this.comp.LoggedIn = true;
-          } else {
-            this.comp.error = 'Incorrect Email or Password.';
-          }
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
+    this.comp.Signup(this.Email, this.Pass);
   }
   Login() {
-    try {
-      const payload = this.Email + '?' + this.Pass;
-      this.http.post(
-        this.accessPointUrl + '/verify',
-        JSON.stringify(payload),
-        {headers: {'Content-Type': 'application/json'}}).subscribe(
-        result => {
-          if (result === true) {
-            this.comp.DisplayLogin = false;
-            this.comp.LoggedIn = true;
-            this.comp.RetrieveCollections();
-          } else {
-            this.comp.error = 'Incorrect Email or Password.';
-          }
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
+    this.comp.Login(this.Email, this.Pass);
   }
-
-
 }

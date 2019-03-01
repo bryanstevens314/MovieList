@@ -18,10 +18,20 @@ namespace server.Controllers
     {
         // GET api/collections
         [HttpGet]
-        public ActionResult<string> Get(int id)
+        public ActionResult<string> Get()
         {
-            Console.WriteLine("HELLO GET");
             try {
+
+                return RetrieveCollections();
+
+            }catch(Exception ex){
+
+                Console.WriteLine("An error occured: " + ex.Message);
+                return ex.Message;
+
+            }
+        }
+        public string RetrieveCollections(){
                 using (var connection = new QC.SqlConnection(
                     "Server=tcp:moviedbserved.database.windows.net,1433;Initial Catalog=db;Persist Security Info=False;User ID=admin123;Password=Password123456789;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
                 {
@@ -39,13 +49,11 @@ namespace server.Controllers
                         string uid = HttpContext.Session.GetString("uid");
                         command.Parameters.AddWithValue("@uid", uid);
                         QC.SqlDataReader reader = command.ExecuteReader();
-                        Console.WriteLine("EXECUTING COMMAND " + uid);
                         string temp = "";
                         while (reader.Read()){
                             if(temp != ""){
                                 temp += ",";
                             }
-                            Console.WriteLine("Reader " + reader);
                             string list_name = reader.GetString(0);
                             string imdbID = reader.GetString(1);
                             temp += "\"" + list_name + "\":\"" + imdbID + "\"";
@@ -53,56 +61,46 @@ namespace server.Controllers
                         return "{" + temp + "}";
                     }
                 }
-            }catch(Exception ex){
-
-                Console.WriteLine("An error occured: " + ex.Message);
-                return ex.Message;
-
-            }
         }
-
         //POST api/collections
         [HttpPost]
         public bool Post([FromBody] string list_name)
         {
-            Console.WriteLine("HELLO COLLECTION");
-             try {
-                using (var connection = new QC.SqlConnection(
-                    "Server=tcp:moviedbserved.database.windows.net,1433;Initial Catalog=db;Persist Security Info=False;User ID=admin123;Password=Password123456789;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
-                {
-                    connection.Open();
-                    Console.WriteLine("OPENING CONNECTION");
-                    QC.SqlParameter parameter;
-                    using (var command = new QC.SqlCommand())
-                    {
-                        command.Connection = connection;
-                        command.CommandType = DT.CommandType.Text;
-                        command.CommandText = @"INSERT INTO User_Movies (list_name, uid, imdbID) VALUES (@list_name, @uid, @imdbID);";
+            try {
 
-                        parameter = new QC.SqlParameter("@list_name", DT.SqlDbType.NVarChar, 50);
-                        parameter.Value = list_name;
-                        command.Parameters.Add(parameter);
+                return InsertIntoUser_Movies(list_name);
 
-                        parameter = new QC.SqlParameter("@imdbID", DT.SqlDbType.NVarChar, 50);
-                        parameter.Value = "";
-                        command.Parameters.Add(parameter);
-
-                        string uid = HttpContext.Session.GetString("uid");
-                        parameter = new QC.SqlParameter("@uid", DT.SqlDbType.NVarChar, 50);
-                        parameter.Value = uid;
-                        command.Parameters.Add(parameter);
-
-                        command.ExecuteScalar();
-                        return true;
-                    }
-                }
             }catch(Exception ex){
 
                 Console.WriteLine("An error occured: " + ex.Message);
                 return false;
+
             }
         }
 
+        public bool InsertIntoUser_Movies (string list_name){
+                using (var connection = new QC.SqlConnection(
+                    "Server=tcp:moviedbserved.database.windows.net,1433;Initial Catalog=db;Persist Security Info=False;User ID=admin123;Password=Password123456789;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
+                {
+                    connection.Open();
+                    using (var command = new QC.SqlCommand())
+                    {
+                        command.Connection = connection;
+                        command.CommandType = DT.CommandType.Text;
+                        command.CommandText =
+                        @"
+                            INSERT INTO User_Movies (list_name, uid, imdbID)
+                            VALUES (@list_name, @uid, @imdbID);
+                        ";
+                        string uid = HttpContext.Session.GetString("uid");
+                        command.Parameters.AddWithValue("@list_name", list_name);
+                        command.Parameters.AddWithValue("@imdbID", "list_name");
+                        command.Parameters.AddWithValue("@uid", uid);
+                        command.ExecuteScalar();
+                        return true;
+                    }
+                }
+        }
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public ActionResult<string> Delete(int id)

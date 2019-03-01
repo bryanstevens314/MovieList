@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {AppComponent} from '../app.component';
 
 @Component({
@@ -7,18 +7,17 @@ import {AppComponent} from '../app.component';
   styleUrls: ['./sidebar.component.css']
 })
 
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
+  constructor(private comp: AppComponent) { }
   @Input() public Collections: object;
   AddingCollection = false;
-  constructor(private comp: AppComponent) { }
-  ngOnInit() { }
+  keys(): Array<string> {
+    return Object.keys(this.Collections);
+  }
   AddCollection() {
     this.Collections[''] = '';
   }
   CreateCollection(event) {
     this.comp.CreateCollection(event.target.value);
-  }
-  keys() : Array<string> {
-    return Object.keys(this.Collections);
   }
 }

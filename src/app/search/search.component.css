@@ -5,19 +5,18 @@ input{
 }
 
 .search_results{
+  background-color:white;
   margin: 0 auto;
   margin-top: -16px;
-  background-color:white;
   width: 456px;
 }
 
 .search_cell{
-  cursor: pointer;
   background-color:white;
+  cursor: pointer;
   margin-top: -15px;
   width:100%;
   height:50px;
-
 }
 
 .search_cell>img{
@@ -27,19 +26,18 @@ input{
 
 .search_cell > p{
   padding-top: 15px;
-
 }
 
 .collection_selection{
-    float: left;
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 10px;
-    width: 400px;
-    height: 250px;
-    margin-top: 80px;
-    margin-left: 36px;
-    position: fixed;
+  background-color: white;
+  position: fixed;
+  float: left;
+  margin-top: 80px;
+  margin-left: 36px;
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 400px;
+  height: 250px;
 }
 
 .back{
@@ -51,18 +49,18 @@ input{
 }
 
 .save_collection{
-  width: 100%;
-  height: 28px;
+  cursor: point;
   background-color: green;
   color: white;
+  text-align: center;
+  float: center;
+  padding-top: 9px;
+  margin-top: 179px;
+  width: 100%;
+  height: 28px;
   border-radius: 0px 0px 9px 9px;
-  cursor: point;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  margin-top: 179px;
-  padding-top: 9px;
-  text-align: center;
-  float: center;
 }

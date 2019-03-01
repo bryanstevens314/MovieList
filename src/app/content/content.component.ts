@@ -10,7 +10,6 @@ import {AppComponent} from '../app.component';
 export class ContentComponent {
 
   constructor(private comp: AppComponent) { }
-  title = 'World';
   @Input() public LoggedIn: boolean;
   @Input() public Collections: boolean;
   Login() {

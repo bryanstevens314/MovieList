@@ -10,12 +10,13 @@ namespace server.Controllers
     [ApiController]
     public class Controller : ControllerBase
     {
-        // GET api/values
+        // REDIRECT on no index.html
         [HttpGet]
         public void Redirect1()
         {
             Response.Redirect ("index.html");
         }
+        //REDIRECT on no /
         [HttpGet("index.html")]
         public void Redirect2()
         {

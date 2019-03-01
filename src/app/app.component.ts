@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {SearchComponent} from './search/search.component';
 import { HttpClient } from '@angular/common/http';
 @Component({
@@ -42,7 +42,6 @@ export class AppComponent implements OnInit {
         this.collectionUrl,
         {headers: {'Content-Type': 'application/json'}}).subscribe(
         result => {
-          console.log('INSIDE RESULTS ', result);
           this.Collections = result;
         }
       );
@@ -50,7 +49,6 @@ export class AppComponent implements OnInit {
       console.log(err);
     }
   }
-
   ReceiveMessage() {
     {this.DisplayLogin ? this.DisplayLogin = false : this.DisplayLogin = true; }
   }
@@ -60,12 +58,54 @@ export class AppComponent implements OnInit {
   DismissLogin() {
     this.DisplayLogin = false;
   }
+  Signup(Email, Pass) {
+    try {
+      const payload = JSON.stringify(Email + '?' + Pass);
+      this.http.post(
+        this.accessPointUrl,
+        payload,
+        {headers: {'Content-Type': 'application/json'}}).subscribe(
+        result => {
+          if (result === true) {
+            this.DisplayLogin = false;
+            this.LoggedIn = true;
+          } else {
+            this.error = 'Incorrect Email or Password.';
+          }
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  Login(Email, Pass) {
+    try {
+      const payload = JSON.stringify(Email + '?' + Pass);
+      this.http.post(
+        this.accessPointUrl + '/verify',
+        payload,
+        {headers: {'Content-Type': 'application/json'}}).subscribe(
+        result => {
+          if (result === true) {
+            this.DisplayLogin = false;
+            this.LoggedIn = true;
+            this.RetrieveCollections();
+          } else {
+            this.error = 'Incorrect Email or Password.';
+          }
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
   Logout() {
     try {
       this.http.delete(
         this.accessPointUrl,
         {headers: {'Content-Type': 'application/json'}}).subscribe(
         result => {
+          this.Collections = {};
           this.LoggedIn = false;
         }
       );

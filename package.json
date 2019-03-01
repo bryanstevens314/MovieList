@@ -4,6 +4,9 @@
   "scripts": {
     "server": "cd server && dotnet run",
     "start-dev": "NODE_ENV='development' ng build && NODE_ENV='development' npm run server",
+    "create_repo": "heroku git:remote -a MovieList",
+    "pushto_repo": "git push heroku master",
+    "deploy": "create_repo && pushto_repo",
     "ng": "ng",
     "start": "cd server && dotnet run",
     "build": "ng build",
