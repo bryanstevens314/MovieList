@@ -11,7 +11,7 @@ id="search"/>
   <hr/>
 
   <div *ngFor="let key of keys()" class="collection_cells">
-    <input type="checkbox" name="key" value="key" ()=""><label>{{key}}</label>
+    <input type="checkbox" name="collection" value={{key}}><label>{{key}}</label>
   </div>
   <button type="submit" class="save_collection">Save</button>
 </form>

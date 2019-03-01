@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import {AppComponent} from '../app.component';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -7,10 +8,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SearchComponent {
 
-  constructor(private httpClient: HttpClient) {}
-  @Input() public Collections: boolean;
+  constructor(private httpClient: HttpClient, private comp: AppComponent) {}
+  @Input() public Collections: object;
+  @Input() public SearchResults: Array<string>;
   SelectedMovie;
-  SearchResults;
   keys(): Array<string> {
     return Object.keys(this.Collections);
   }
@@ -28,14 +29,26 @@ export class SearchComponent {
     }
   }
   MovieClicked(id) {
+    console.log("HELLO ID " + id);
     this.SelectedMovie = id;
   }
   ClearSearch() {
     this.SearchResults = null;
   }
   SaveCollection(event) {
-    this.SelectedMovie = null;
     console.log(event);
+    let payload = '';
+    Object.values(event.target).map(element => {
+      if (element['checked'] && element['checked'] === true) {
+        if (payload === '') {
+          payload += `${element['value']}:${this.SelectedMovie}`;
+        } else {
+          payload += `,${element['value']}:${this.SelectedMovie}`;
+        }
+      }
+    });
+    this.SelectedMovie = null;
+    this.comp.UpdateCollections(payload);
   }
   CloseCollections() {
     this.SelectedMovie = null;

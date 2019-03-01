@@ -1,13 +1,19 @@
 <div class="side_bar">
+
   <div class="head">
     <p class="collection">Collections</p>
     <p class="add_collections" (click)='AddCollection()'>+</p>
   </div>
+
   <div *ngIf="Collections" class="collections">
-    <div *ngFor="let key of keys()" class="collections_cell">
+
+    <div *ngFor="let key of keys()" class="collections_cell" (click)="CollectionSelected(key)">
+
       <input *ngIf="!key" type="text" (keyup.enter)='CreateCollection($event)' autofocus="autofocus">
       <p *ngIf="key">{{key}}</p>
 
     </div>
+
   </div>
+
 </div>

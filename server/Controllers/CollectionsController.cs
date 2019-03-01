@@ -64,12 +64,16 @@ namespace server.Controllers
         }
         //POST api/collections
         [HttpPost]
-        public bool Post([FromBody] string list_name)
+        public bool Post([FromBody] string payload)
         {
             try {
+                string[] collections = payload.Split(",");
+                foreach(string coll in collections){
+                    string[] movies = coll.Split(":");
+                    InsertIntoUser_Movies(movies);
 
-                return InsertIntoUser_Movies(list_name);
-
+                }
+                return true;
             }catch(Exception ex){
 
                 Console.WriteLine("An error occured: " + ex.Message);
@@ -78,7 +82,7 @@ namespace server.Controllers
             }
         }
 
-        public bool InsertIntoUser_Movies (string list_name){
+        public void InsertIntoUser_Movies (string[] payload){
                 using (var connection = new QC.SqlConnection(
                     "Server=tcp:moviedbserved.database.windows.net,1433;Initial Catalog=db;Persist Security Info=False;User ID=admin123;Password=Password123456789;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
                 {
@@ -93,11 +97,10 @@ namespace server.Controllers
                             VALUES (@list_name, @uid, @imdbID);
                         ";
                         string uid = HttpContext.Session.GetString("uid");
-                        command.Parameters.AddWithValue("@list_name", list_name);
-                        command.Parameters.AddWithValue("@imdbID", "list_name");
+                        command.Parameters.AddWithValue("@list_name", payload[0]);
+                        command.Parameters.AddWithValue("@imdbID", payload[1]);
                         command.Parameters.AddWithValue("@uid", uid);
                         command.ExecuteScalar();
-                        return true;
                     }
                 }
         }

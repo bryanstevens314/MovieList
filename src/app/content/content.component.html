@@ -1,11 +1,12 @@
 
 <div class="content">
 
-    <app-search [Collections] = "Collections"></app-search>
+    <app-search [Collections] = "Collections" [SearchResults] = "SearchResults"></app-search>
     <div class="login_signup" (click)='Login()' *ngIf="!LoggedIn" >
         <p>Login/ SignUp</p>
     </div>
     <div class="logout" (click)='Logout()' *ngIf="LoggedIn" >
         <p>Logout</p>
     </div>
+    <app-movie-view *ngIf = "CurrentCollection" [CurrentCollection] = "CurrentCollection" ></app-movie-view>
 </div>

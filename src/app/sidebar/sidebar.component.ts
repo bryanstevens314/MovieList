@@ -18,6 +18,9 @@ export class SidebarComponent {
     this.Collections[''] = '';
   }
   CreateCollection(event) {
-    this.comp.CreateCollection(event.target.value);
+    this.comp.CreateCollection(`${event.target.value}:`);
+  }
+  CollectionSelected(collection) {
+    this.comp.UserSelectedCollection(collection);
   }
 }

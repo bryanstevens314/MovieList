@@ -36,10 +36,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _login_signup_login_signup_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./login-signup/login-signup.component */ "./src/app/login-signup/login-signup.component.ts");
 
 
 
-var routes = [];
+
+var routes = [
+    {
+        path: 'login',
+        pathMatch: 'full',
+        component: _login_signup_login_signup_component__WEBPACK_IMPORTED_MODULE_3__["LoginSignupComponent"]
+    }
+];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
     }
@@ -74,7 +82,7 @@ module.exports = "\n.main{\n  text-align:center;\n}\n\n\n\n\n\n/*# sourceMapping
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div *ngIf = \"!DisplayLogin\" class=\"main\" (click)=\"Clicked()\">\n    <app-sidebar [Collections] = \"Collections\"></app-sidebar>\n    <app-content [LoggedIn]=\"LoggedIn\" [Collections] = \"Collections\"></app-content>\n</div>\n<app-login-signup *ngIf = \"DisplayLogin\"></app-login-signup>\n\n<router-outlet> </router-outlet>\n"
+module.exports = "\n<div *ngIf = \"!DisplayLogin\" class=\"main\" (click)=\"Clicked()\">\n    <app-sidebar [Collections] = \"Collections\"></app-sidebar>\n    <app-content [LoggedIn]=\"LoggedIn\" [Collections] = \"Collections\" [SearchResults] = \"SearchResults\"></app-content>\n\n\n</div>\n<app-login-signup *ngIf = \"DisplayLogin\"></app-login-signup>\n\n<router-outlet> </router-outlet>\n"
 
 /***/ }),
 
@@ -90,18 +98,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _search_search_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./search/search.component */ "./src/app/search/search.component.ts");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 
 
 
 var AppComponent = /** @class */ (function () {
-    function AppComponent(SearchComp, http) {
-        this.SearchComp = SearchComp;
+    function AppComponent(http) {
         this.http = http;
-        this.accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
-        this.collectionUrl = 'https://myfavemovies.herokuapp.com/api/collections';
+        this.accessPointUrl = 'https://localhost:5001/api/users';
+        this.collectionUrl = 'https://localhost:5001/api/collections';
+        this.OMDBUrl = 'https://www.omdbapi.com/?apikey=6c3999b3&i=';
+        this.SearchResults = [];
         this.Collections = {};
         this.DisplayLogin = false;
         this.LoggedIn = false;
@@ -129,6 +136,7 @@ var AppComponent = /** @class */ (function () {
         try {
             this.http.get(this.collectionUrl, { headers: { 'Content-Type': 'application/json' } }).subscribe(function (result) {
                 _this.Collections = result;
+                console.log(result);
             });
         }
         catch (err) {
@@ -141,7 +149,7 @@ var AppComponent = /** @class */ (function () {
         }
     };
     AppComponent.prototype.Clicked = function () {
-        this.SearchComp.ClearSearch();
+        this.SearchResults = [];
     };
     AppComponent.prototype.DismissLogin = function () {
         this.DisplayLogin = false;
@@ -208,14 +216,46 @@ var AppComponent = /** @class */ (function () {
             console.log(err);
         }
     };
+    AppComponent.prototype.UserSelectedCollection = function (collection) {
+        var _this = this;
+        this.Collections[collection].split(',').map(function (imdbID) {
+            if (imdbID !== '') {
+                _this.FetchMovieFromOMDB(imdbID);
+            }
+        });
+    };
+    AppComponent.prototype.FetchMovieFromOMDB = function (imdbID) {
+        var _this = this;
+        try {
+            this.http.get(this.OMDBUrl + imdbID).subscribe(function (result) {
+                if (result) {
+                    if (!_this.CurrentCollection) {
+                        _this.CurrentCollection = [];
+                    }
+                    _this.CurrentCollection.push(result);
+                }
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+    AppComponent.prototype.UpdateCollections = function (payload) {
+        var _this = this;
+        this.http.post(this.collectionUrl, JSON.stringify(payload), { headers: { 'Content-Type': 'application/json' } }).subscribe(function (result) {
+            if (result === true) {
+                _this.RetrieveCollections();
+            }
+        });
+    };
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-root',
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
-            providers: [_search_search_component__WEBPACK_IMPORTED_MODULE_2__["SearchComponent"]],
+            providers: [],
             styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_search_search_component__WEBPACK_IMPORTED_MODULE_2__["SearchComponent"], _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -246,6 +286,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _content_content_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./content/content.component */ "./src/app/content/content.component.ts");
 /* harmony import */ var _sidebar_sidebar_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./sidebar/sidebar.component */ "./src/app/sidebar/sidebar.component.ts");
 /* harmony import */ var _login_signup_login_signup_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./login-signup/login-signup.component */ "./src/app/login-signup/login-signup.component.ts");
+/* harmony import */ var _movie_view_movie_view_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./movie-view/movie-view.component */ "./src/app/movie-view/movie-view.component.ts");
+
 
 
 
@@ -269,7 +311,8 @@ var AppModule = /** @class */ (function () {
                 _search_search_component__WEBPACK_IMPORTED_MODULE_8__["SearchComponent"],
                 _content_content_component__WEBPACK_IMPORTED_MODULE_9__["ContentComponent"],
                 _sidebar_sidebar_component__WEBPACK_IMPORTED_MODULE_10__["SidebarComponent"],
-                _login_signup_login_signup_component__WEBPACK_IMPORTED_MODULE_11__["LoginSignupComponent"]
+                _login_signup_login_signup_component__WEBPACK_IMPORTED_MODULE_11__["LoginSignupComponent"],
+                _movie_view_movie_view_component__WEBPACK_IMPORTED_MODULE_12__["MovieViewComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -295,7 +338,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n.content{\n  background-color: #121212;\n  text-align: center;\n  float: right;\n  width: 73%;\n  height: 100vh;\n}\n\n.login_signup{\n  cursor: pointer;\n  position: fixed;\n  top: 8px;\n  right: 0px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  /* float: right; */\n  width: 111px;\n  height: 34px;\n}\n\n.login_signup>p{\n  color: white;\n  padding-top: -9px;\n  margin-top: 8px;\n}\n\n.logout{\n  cursor: pointer;\n  position: fixed;\n  top: 8px;\n  right: 0px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  width: 111px;\n  height: 34px;\n}\n\n.logout>p{\n  color: white;\n  padding-top: -9px;\n  margin-top: 8px;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29udGVudC9jb250ZW50LmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUNBO0VBQ0UseUJBQXlCO0VBQ3pCLGtCQUFrQjtFQUNsQixZQUFZO0VBQ1osVUFBVTtFQUNWLGFBQWE7QUFDZjs7QUFFQTtFQUNFLGVBQWU7RUFDZixlQUFlO0VBQ2YsUUFBUTtFQUNSLFVBQVU7RUFDVix5QkFBeUI7RUFDekIsc0JBQXNCO0VBQ3RCLHFCQUFxQjtFQUNyQixpQkFBaUI7RUFDakIsa0JBQWtCO0VBQ2xCLFlBQVk7RUFDWixZQUFZO0FBQ2Q7O0FBRUE7RUFDRSxZQUFZO0VBQ1osaUJBQWlCO0VBQ2pCLGVBQWU7QUFDakI7O0FBQ0E7RUFDRSxlQUFlO0VBQ2YsZUFBZTtFQUNmLFFBQVE7RUFDUixVQUFVO0VBQ1YseUJBQXlCO0VBQ3pCLHNCQUFzQjtFQUN0QixxQkFBcUI7RUFDckIsaUJBQWlCO0VBQ2pCLFlBQVk7RUFDWixZQUFZO0FBQ2Q7O0FBRUE7RUFDRSxZQUFZO0VBQ1osaUJBQWlCO0VBQ2pCLGVBQWU7QUFDakIiLCJmaWxlIjoic3JjL2FwcC9jb250ZW50L2NvbnRlbnQuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIlxuLmNvbnRlbnR7XG4gIGJhY2tncm91bmQtY29sb3I6ICMxMjEyMTI7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgZmxvYXQ6IHJpZ2h0O1xuICB3aWR0aDogNzMlO1xuICBoZWlnaHQ6IDEwMHZoO1xufVxuXG4ubG9naW5fc2lnbnVwe1xuICBjdXJzb3I6IHBvaW50ZXI7XG4gIHBvc2l0aW9uOiBmaXhlZDtcbiAgdG9wOiA4cHg7XG4gIHJpZ2h0OiAwcHg7XG4gIC13ZWJraXQtdXNlci1zZWxlY3Q6IG5vbmU7XG4gIC1tb3otdXNlci1zZWxlY3Q6IG5vbmU7XG4gIC1tcy11c2VyLXNlbGVjdDogbm9uZTtcbiAgdXNlci1zZWxlY3Q6IG5vbmU7XG4gIC8qIGZsb2F0OiByaWdodDsgKi9cbiAgd2lkdGg6IDExMXB4O1xuICBoZWlnaHQ6IDM0cHg7XG59XG5cbi5sb2dpbl9zaWdudXA+cHtcbiAgY29sb3I6IHdoaXRlO1xuICBwYWRkaW5nLXRvcDogLTlweDtcbiAgbWFyZ2luLXRvcDogOHB4O1xufVxuLmxvZ291dHtcbiAgY3Vyc29yOiBwb2ludGVyO1xuICBwb3NpdGlvbjogZml4ZWQ7XG4gIHRvcDogOHB4O1xuICByaWdodDogMHB4O1xuICAtd2Via2l0LXVzZXItc2VsZWN0OiBub25lO1xuICAtbW96LXVzZXItc2VsZWN0OiBub25lO1xuICAtbXMtdXNlci1zZWxlY3Q6IG5vbmU7XG4gIHVzZXItc2VsZWN0OiBub25lO1xuICB3aWR0aDogMTExcHg7XG4gIGhlaWdodDogMzRweDtcbn1cblxuLmxvZ291dD5we1xuICBjb2xvcjogd2hpdGU7XG4gIHBhZGRpbmctdG9wOiAtOXB4O1xuICBtYXJnaW4tdG9wOiA4cHg7XG59XG4iXX0= */"
+module.exports = "\n.content{\n  background-color: #121212;\n  text-align: center;\n  float: right;\n  width: 73%;\n  height: 100vh;\n}\n\n.login_signup{\n  cursor: pointer;\n  position: fixed;\n  top: 0px;\n  right: 0px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  /* float: right; */\n  width: 111px;\n  height: 34px;\n}\n\n.login_signup>p{\n  color: white;\n  padding-top: -9px;\n  margin-top: 8px;\n}\n\n.logout{\n  cursor: pointer;\n  position: fixed;\n  top: 0px;\n  right: 0px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  width: 111px;\n  height: 34px;\n}\n\n.logout>p{\n  color: white;\n  padding-top: -9px;\n  margin-top: 8px;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29udGVudC9jb250ZW50LmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUNBO0VBQ0UseUJBQXlCO0VBQ3pCLGtCQUFrQjtFQUNsQixZQUFZO0VBQ1osVUFBVTtFQUNWLGFBQWE7QUFDZjs7QUFFQTtFQUNFLGVBQWU7RUFDZixlQUFlO0VBQ2YsUUFBUTtFQUNSLFVBQVU7RUFDVix5QkFBeUI7RUFDekIsc0JBQXNCO0VBQ3RCLHFCQUFxQjtFQUNyQixpQkFBaUI7RUFDakIsa0JBQWtCO0VBQ2xCLFlBQVk7RUFDWixZQUFZO0FBQ2Q7O0FBRUE7RUFDRSxZQUFZO0VBQ1osaUJBQWlCO0VBQ2pCLGVBQWU7QUFDakI7O0FBQ0E7RUFDRSxlQUFlO0VBQ2YsZUFBZTtFQUNmLFFBQVE7RUFDUixVQUFVO0VBQ1YseUJBQXlCO0VBQ3pCLHNCQUFzQjtFQUN0QixxQkFBcUI7RUFDckIsaUJBQWlCO0VBQ2pCLFlBQVk7RUFDWixZQUFZO0FBQ2Q7O0FBRUE7RUFDRSxZQUFZO0VBQ1osaUJBQWlCO0VBQ2pCLGVBQWU7QUFDakIiLCJmaWxlIjoic3JjL2FwcC9jb250ZW50L2NvbnRlbnQuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIlxuLmNvbnRlbnR7XG4gIGJhY2tncm91bmQtY29sb3I6ICMxMjEyMTI7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgZmxvYXQ6IHJpZ2h0O1xuICB3aWR0aDogNzMlO1xuICBoZWlnaHQ6IDEwMHZoO1xufVxuXG4ubG9naW5fc2lnbnVwe1xuICBjdXJzb3I6IHBvaW50ZXI7XG4gIHBvc2l0aW9uOiBmaXhlZDtcbiAgdG9wOiAwcHg7XG4gIHJpZ2h0OiAwcHg7XG4gIC13ZWJraXQtdXNlci1zZWxlY3Q6IG5vbmU7XG4gIC1tb3otdXNlci1zZWxlY3Q6IG5vbmU7XG4gIC1tcy11c2VyLXNlbGVjdDogbm9uZTtcbiAgdXNlci1zZWxlY3Q6IG5vbmU7XG4gIC8qIGZsb2F0OiByaWdodDsgKi9cbiAgd2lkdGg6IDExMXB4O1xuICBoZWlnaHQ6IDM0cHg7XG59XG5cbi5sb2dpbl9zaWdudXA+cHtcbiAgY29sb3I6IHdoaXRlO1xuICBwYWRkaW5nLXRvcDogLTlweDtcbiAgbWFyZ2luLXRvcDogOHB4O1xufVxuLmxvZ291dHtcbiAgY3Vyc29yOiBwb2ludGVyO1xuICBwb3NpdGlvbjogZml4ZWQ7XG4gIHRvcDogMHB4O1xuICByaWdodDogMHB4O1xuICAtd2Via2l0LXVzZXItc2VsZWN0OiBub25lO1xuICAtbW96LXVzZXItc2VsZWN0OiBub25lO1xuICAtbXMtdXNlci1zZWxlY3Q6IG5vbmU7XG4gIHVzZXItc2VsZWN0OiBub25lO1xuICB3aWR0aDogMTExcHg7XG4gIGhlaWdodDogMzRweDtcbn1cblxuLmxvZ291dD5we1xuICBjb2xvcjogd2hpdGU7XG4gIHBhZGRpbmctdG9wOiAtOXB4O1xuICBtYXJnaW4tdG9wOiA4cHg7XG59XG4iXX0= */"
 
 /***/ }),
 
@@ -306,7 +349,7 @@ module.exports = "\n.content{\n  background-color: #121212;\n  text-align: cente
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div class=\"content\">\n\n    <app-search [Collections] = \"Collections\"></app-search>\n    <div class=\"login_signup\" (click)='Login()' *ngIf=\"!LoggedIn\" >\n        <p>Login/ SignUp</p>\n    </div>\n    <div class=\"logout\" (click)='Logout()' *ngIf=\"LoggedIn\" >\n        <p>Logout</p>\n    </div>\n</div>\n"
+module.exports = "\n<div class=\"content\">\n\n    <app-search [Collections] = \"Collections\" [SearchResults] = \"SearchResults\"></app-search>\n    <div class=\"login_signup\" (click)='Login()' *ngIf=\"!LoggedIn\" >\n        <p>Login/ SignUp</p>\n    </div>\n    <div class=\"logout\" (click)='Logout()' *ngIf=\"LoggedIn\" >\n        <p>Logout</p>\n    </div>\n    <app-movie-view *ngIf = \"CurrentCollection\" [CurrentCollection] = \"CurrentCollection\" ></app-movie-view>\n</div>\n"
 
 /***/ }),
 
@@ -342,8 +385,16 @@ var ContentComponent = /** @class */ (function () {
     ], ContentComponent.prototype, "LoggedIn", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
     ], ContentComponent.prototype, "Collections", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Array)
+    ], ContentComponent.prototype, "SearchResults", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Array)
+    ], ContentComponent.prototype, "CurrentCollection", void 0);
     ContentComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-content',
@@ -366,7 +417,7 @@ var ContentComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".container{\n  background-color: white;\n  position: fixed;\n  text-align: center;\n  margin: 0 auto;\n  margin-top: 80px;\n  padding-top: 31px;\n  width: 300px;\n  height: 83px;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvaGVyby1mb3JtL2hlcm8tZm9ybS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsdUJBQXVCO0VBQ3ZCLGVBQWU7RUFDZixrQkFBa0I7RUFDbEIsY0FBYztFQUNkLGdCQUFnQjtFQUNoQixpQkFBaUI7RUFDakIsWUFBWTtFQUNaLFlBQVk7QUFDZCIsImZpbGUiOiJzcmMvYXBwL2hlcm8tZm9ybS9oZXJvLWZvcm0uY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5jb250YWluZXJ7XG4gIGJhY2tncm91bmQtY29sb3I6IHdoaXRlO1xuICBwb3NpdGlvbjogZml4ZWQ7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgbWFyZ2luOiAwIGF1dG87XG4gIG1hcmdpbi10b3A6IDgwcHg7XG4gIHBhZGRpbmctdG9wOiAzMXB4O1xuICB3aWR0aDogMzAwcHg7XG4gIGhlaWdodDogODNweDtcbn1cbiJdfQ== */"
+module.exports = ".container{\n  background-color: white;\n  text-align: center;\n  margin: 0 auto;\n  margin-top: 80px;\n  padding-top: 31px;\n  width: 300px;\n  height: 83px;\n}\n\n.dismiss{\n  margin-top: -27px;\n  margin-right: 9px;\n  cursor: pointer;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  float: right;\n  top: -7px;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvaGVyby1mb3JtL2hlcm8tZm9ybS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsdUJBQXVCO0VBQ3ZCLGtCQUFrQjtFQUNsQixjQUFjO0VBQ2QsZ0JBQWdCO0VBQ2hCLGlCQUFpQjtFQUNqQixZQUFZO0VBQ1osWUFBWTtBQUNkOztBQUVBO0VBQ0UsaUJBQWlCO0VBQ2pCLGlCQUFpQjtFQUNqQixlQUFlO0VBQ2YseUJBQWlCO0tBQWpCLHNCQUFpQjtNQUFqQixxQkFBaUI7VUFBakIsaUJBQWlCO0VBQ2pCLFlBQVk7RUFDWixTQUFTO0FBQ1giLCJmaWxlIjoic3JjL2FwcC9oZXJvLWZvcm0vaGVyby1mb3JtLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuY29udGFpbmVye1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB3aGl0ZTtcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xuICBtYXJnaW46IDAgYXV0bztcbiAgbWFyZ2luLXRvcDogODBweDtcbiAgcGFkZGluZy10b3A6IDMxcHg7XG4gIHdpZHRoOiAzMDBweDtcbiAgaGVpZ2h0OiA4M3B4O1xufVxuXG4uZGlzbWlzc3tcbiAgbWFyZ2luLXRvcDogLTI3cHg7XG4gIG1hcmdpbi1yaWdodDogOXB4O1xuICBjdXJzb3I6IHBvaW50ZXI7XG4gIHVzZXItc2VsZWN0OiBub25lO1xuICBmbG9hdDogcmlnaHQ7XG4gIHRvcDogLTdweDtcbn1cbiJdfQ== */"
 
 /***/ }),
 
@@ -377,7 +428,7 @@ module.exports = ".container{\n  background-color: white;\n  position: fixed;\n 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" >\n    <form #f=\"ngForm\" #heroForm=\"ngForm\">\n      <div class=\"form-group\">\n        <label for=\"name\">Email</label>\n        <input type=\"text\" class=\"form-control\" ng-model=\"email\" id=\"email\" (keyup)='EmailChanged($event)' required>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"alterEgo\">Password</label>\n        <input type=\"text\" class=\"form-control\" ng-model=\"pass\" id=\"pass\" (keyup)='PassChanged($event)'>\n      </div>\n\n      <button type=\"submit\" (click)=\"Signup($event)\">Sign Up</button>\n      <button type=\"submit\" (click)=\"Login($event)\">Login</button>\n\n    </form>\n</div>\n"
+module.exports = "<div class=\"container\" >\n  <div class=\"dismiss\" (click)=\"Dismiss()\">X</div>\n    <form #f=\"ngForm\" #heroForm=\"ngForm\">\n      <div class=\"form-group\">\n        <label for=\"name\">Email</label>\n        <input type=\"text\" class=\"form-control\" ng-model=\"email\" id=\"email\" (keyup)='EmailChanged($event)' required>\n      </div>\n\n      <div class=\"form-group\">\n        <label for=\"alterEgo\">Password</label>\n        <input type=\"text\" class=\"form-control\" ng-model=\"pass\" id=\"pass\" (keyup)='PassChanged($event)'>\n      </div>\n\n      <button type=\"submit\" (click)=\"Signup($event)\">Sign Up</button>\n      <button type=\"submit\" (click)=\"Login($event)\">Login</button>\n\n    </form>\n</div>\n"
 
 /***/ }),
 
@@ -403,7 +454,6 @@ var HeroFormComponent = /** @class */ (function () {
     function HeroFormComponent(comp, http) {
         this.comp = comp;
         this.http = http;
-        this.accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
         this.Email = '';
         this.Pass = '';
     }
@@ -418,6 +468,9 @@ var HeroFormComponent = /** @class */ (function () {
     };
     HeroFormComponent.prototype.Login = function () {
         this.comp.Login(this.Email, this.Pass);
+    };
+    HeroFormComponent.prototype.Dismiss = function () {
+        this.comp.DismissLogin();
     };
     HeroFormComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -452,7 +505,7 @@ module.exports = ".login_page{\n  background-color:#121212;\n  position: fixed;\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"login_page\" (click)=\"Dismiss()\">\n</div>\n<app-hero-form></app-hero-form>\n"
+module.exports = "<div class=\"login_page\" >\n    <app-hero-form></app-hero-form>\n</div>\n\n"
 
 /***/ }),
 
@@ -476,9 +529,6 @@ var LoginSignupComponent = /** @class */ (function () {
     function LoginSignupComponent(comp) {
         this.comp = comp;
     }
-    LoginSignupComponent.prototype.Dismiss = function () {
-        this.comp.DismissLogin();
-    };
     LoginSignupComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-login-signup',
@@ -488,6 +538,66 @@ var LoginSignupComponent = /** @class */ (function () {
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_app_component__WEBPACK_IMPORTED_MODULE_2__["AppComponent"]])
     ], LoginSignupComponent);
     return LoginSignupComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/movie-view/movie-view.component.css":
+/*!*****************************************************!*\
+  !*** ./src/app/movie-view/movie-view.component.css ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".movie_view{\n  background-color: #121212;\n  text-align: center;\n  float: right;\n  width: 73%;\n  height: 100vh;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW92aWUtdmlldy9tb3ZpZS12aWV3LmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSx5QkFBeUI7RUFDekIsa0JBQWtCO0VBQ2xCLFlBQVk7RUFDWixVQUFVO0VBQ1YsYUFBYTtBQUNmIiwiZmlsZSI6InNyYy9hcHAvbW92aWUtdmlldy9tb3ZpZS12aWV3LmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIubW92aWVfdmlld3tcbiAgYmFja2dyb3VuZC1jb2xvcjogIzEyMTIxMjtcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xuICBmbG9hdDogcmlnaHQ7XG4gIHdpZHRoOiA3MyU7XG4gIGhlaWdodDogMTAwdmg7XG59XG4iXX0= */"
+
+/***/ }),
+
+/***/ "./src/app/movie-view/movie-view.component.html":
+/*!******************************************************!*\
+  !*** ./src/app/movie-view/movie-view.component.html ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"movie_view\">\n  <div *ngFor=\"let movie of CurrentCollection\">\n    {{movie.Title}}\n  </div>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/movie-view/movie-view.component.ts":
+/*!****************************************************!*\
+  !*** ./src/app/movie-view/movie-view.component.ts ***!
+  \****************************************************/
+/*! exports provided: MovieViewComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MovieViewComponent", function() { return MovieViewComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var MovieViewComponent = /** @class */ (function () {
+    function MovieViewComponent() {
+    }
+    MovieViewComponent.prototype.ngOnInit = function () {
+    };
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Array)
+    ], MovieViewComponent.prototype, "CurrentCollection", void 0);
+    MovieViewComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-movie-view',
+            template: __webpack_require__(/*! ./movie-view.component.html */ "./src/app/movie-view/movie-view.component.html"),
+            styles: [__webpack_require__(/*! ./movie-view.component.css */ "./src/app/movie-view/movie-view.component.css")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], MovieViewComponent);
+    return MovieViewComponent;
 }());
 
 
@@ -512,7 +622,7 @@ module.exports = "input{\n  cursor: pointer;\n  width: 450px;\n  height: 25px;\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<input\n(keyup)='PerformSearch($event)'\ntype=\"text\"\nplaceholder=\"Search...\"\nng-model=\"search\"\nid=\"search\"/>\n\n<form *ngIf=\"SelectedMovie\" (ngSubmit)=\"SaveCollection($event)\" class=\"collection_selection\">\n  <p>Collections</p>\n  <div class=\"back\" (click)=\"CloseCollections()\">Return</div>\n  <hr/>\n\n  <div *ngFor=\"let key of keys()\" class=\"collection_cells\">\n    <input type=\"checkbox\" name=\"key\" value=\"key\" ()=\"\"><label>{{key}}</label>\n  </div>\n  <button type=\"submit\" class=\"save_collection\">Save</button>\n</form>\n\n<div *ngIf=\"SearchResults\" class=\"search_results\">\n\n  <div class=\"search_results\">\n      <div *ngFor=\"let element of SearchResults\" class=\"search_cell\" (click)=\"MovieClicked(element.imdbID)\">\n        <img src={{element.Poster}}>\n        <p>{{element.Title}}</p>\n      </div>\n  </div>\n</div>\n"
+module.exports = "<input\n(keyup)='PerformSearch($event)'\ntype=\"text\"\nplaceholder=\"Search...\"\nng-model=\"search\"\nid=\"search\"/>\n\n<form *ngIf=\"SelectedMovie\" (ngSubmit)=\"SaveCollection($event)\" class=\"collection_selection\">\n  <p>Collections</p>\n  <div class=\"back\" (click)=\"CloseCollections()\">Return</div>\n  <hr/>\n\n  <div *ngFor=\"let key of keys()\" class=\"collection_cells\">\n    <input type=\"checkbox\" name=\"collection\" value={{key}}><label>{{key}}</label>\n  </div>\n  <button type=\"submit\" class=\"save_collection\">Save</button>\n</form>\n\n<div *ngIf=\"SearchResults\" class=\"search_results\">\n\n  <div class=\"search_results\">\n      <div *ngFor=\"let element of SearchResults\" class=\"search_cell\" (click)=\"MovieClicked(element.imdbID)\">\n        <img src={{element.Poster}}>\n        <p>{{element.Title}}</p>\n      </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -529,12 +639,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../app.component */ "./src/app/app.component.ts");
+
 
 
 
 var SearchComponent = /** @class */ (function () {
-    function SearchComponent(httpClient) {
+    function SearchComponent(httpClient, comp) {
         this.httpClient = httpClient;
+        this.comp = comp;
     }
     SearchComponent.prototype.keys = function () {
         return Object.keys(this.Collections);
@@ -556,29 +669,47 @@ var SearchComponent = /** @class */ (function () {
         }
     };
     SearchComponent.prototype.MovieClicked = function (id) {
+        console.log("HELLO ID " + id);
         this.SelectedMovie = id;
     };
     SearchComponent.prototype.ClearSearch = function () {
         this.SearchResults = null;
     };
     SearchComponent.prototype.SaveCollection = function (event) {
-        this.SelectedMovie = null;
+        var _this = this;
         console.log(event);
+        var payload = '';
+        Object.values(event.target).map(function (element) {
+            if (element['checked'] && element['checked'] === true) {
+                if (payload === '') {
+                    payload += element['value'] + ":" + _this.SelectedMovie;
+                }
+                else {
+                    payload += "," + element['value'] + ":" + _this.SelectedMovie;
+                }
+            }
+        });
+        this.SelectedMovie = null;
+        this.comp.UpdateCollections(payload);
     };
     SearchComponent.prototype.CloseCollections = function () {
         this.SelectedMovie = null;
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
     ], SearchComponent.prototype, "Collections", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Array)
+    ], SearchComponent.prototype, "SearchResults", void 0);
     SearchComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-search',
             template: __webpack_require__(/*! ./search.component.html */ "./src/app/search/search.component.html"),
             styles: [__webpack_require__(/*! ./search.component.css */ "./src/app/search/search.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"], _app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]])
     ], SearchComponent);
     return SearchComponent;
 }());
@@ -594,7 +725,7 @@ var SearchComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".side_bar{\n  background-color:#222222;\n  position: fixed;\n  top:0px;\n  width:27%;\n  height:100%;\n}\n\n.head{\n\n  background-color:#E2E2E2;\n  position: fixed;\n  width:27%;\n  height:50px;\n}\n\n.head > p{\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  display: inline-block;\n}\n\n.collection{\n  color: #222222;\n  float: left;\n  font-size: 28px;\n  margin-top: 9px;\n  margin-left: 10px;\n}\n\n.collections{\n  width:100%;\n  margin-top: 65px;\n}\n\n.collections_cell{\n  border-radius: 0px 32px 32px 0px;\n  margin-top: 3px;\n  width: 97%;\n  height: 35px;\n  background-color: white;\n}\n\n.collections_cell > input{\n  float: left;\n  height: 33px;\n  width: 285px;\n  border: none;\n}\n\n.add_collections{\n  float: right;\n  margin-right: 12px;\n  font-size: 40px;\n  margin-top: 0px;\n  cursor:pointer;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2lkZWJhci9zaWRlYmFyLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSx3QkFBd0I7RUFDeEIsZUFBZTtFQUNmLE9BQU87RUFDUCxTQUFTO0VBQ1QsV0FBVztBQUNiOztBQUVBOztFQUVFLHdCQUF3QjtFQUN4QixlQUFlO0VBQ2YsU0FBUztFQUNULFdBQVc7QUFDYjs7QUFFQTtFQUNFLHlCQUFpQjtLQUFqQixzQkFBaUI7TUFBakIscUJBQWlCO1VBQWpCLGlCQUFpQjtFQUNqQixxQkFBcUI7QUFDdkI7O0FBRUE7RUFDRSxjQUFjO0VBQ2QsV0FBVztFQUNYLGVBQWU7RUFDZixlQUFlO0VBQ2YsaUJBQWlCO0FBQ25COztBQUVBO0VBQ0UsVUFBVTtFQUNWLGdCQUFnQjtBQUNsQjs7QUFFQTtFQUNFLGdDQUFnQztFQUNoQyxlQUFlO0VBQ2YsVUFBVTtFQUNWLFlBQVk7RUFDWix1QkFBdUI7QUFDekI7O0FBRUE7RUFDRSxXQUFXO0VBQ1gsWUFBWTtFQUNaLFlBQVk7RUFDWixZQUFZO0FBQ2Q7O0FBQ0E7RUFDRSxZQUFZO0VBQ1osa0JBQWtCO0VBQ2xCLGVBQWU7RUFDZixlQUFlO0VBQ2YsY0FBYztBQUNoQiIsImZpbGUiOiJzcmMvYXBwL3NpZGViYXIvc2lkZWJhci5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnNpZGVfYmFye1xuICBiYWNrZ3JvdW5kLWNvbG9yOiMyMjIyMjI7XG4gIHBvc2l0aW9uOiBmaXhlZDtcbiAgdG9wOjBweDtcbiAgd2lkdGg6MjclO1xuICBoZWlnaHQ6MTAwJTtcbn1cblxuLmhlYWR7XG5cbiAgYmFja2dyb3VuZC1jb2xvcjojRTJFMkUyO1xuICBwb3NpdGlvbjogZml4ZWQ7XG4gIHdpZHRoOjI3JTtcbiAgaGVpZ2h0OjUwcHg7XG59XG5cbi5oZWFkID4gcHtcbiAgdXNlci1zZWxlY3Q6IG5vbmU7XG4gIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbn1cblxuLmNvbGxlY3Rpb257XG4gIGNvbG9yOiAjMjIyMjIyO1xuICBmbG9hdDogbGVmdDtcbiAgZm9udC1zaXplOiAyOHB4O1xuICBtYXJnaW4tdG9wOiA5cHg7XG4gIG1hcmdpbi1sZWZ0OiAxMHB4O1xufVxuXG4uY29sbGVjdGlvbnN7XG4gIHdpZHRoOjEwMCU7XG4gIG1hcmdpbi10b3A6IDY1cHg7XG59XG5cbi5jb2xsZWN0aW9uc19jZWxse1xuICBib3JkZXItcmFkaXVzOiAwcHggMzJweCAzMnB4IDBweDtcbiAgbWFyZ2luLXRvcDogM3B4O1xuICB3aWR0aDogOTclO1xuICBoZWlnaHQ6IDM1cHg7XG4gIGJhY2tncm91bmQtY29sb3I6IHdoaXRlO1xufVxuXG4uY29sbGVjdGlvbnNfY2VsbCA+IGlucHV0e1xuICBmbG9hdDogbGVmdDtcbiAgaGVpZ2h0OiAzM3B4O1xuICB3aWR0aDogMjg1cHg7XG4gIGJvcmRlcjogbm9uZTtcbn1cbi5hZGRfY29sbGVjdGlvbnN7XG4gIGZsb2F0OiByaWdodDtcbiAgbWFyZ2luLXJpZ2h0OiAxMnB4O1xuICBmb250LXNpemU6IDQwcHg7XG4gIG1hcmdpbi10b3A6IDBweDtcbiAgY3Vyc29yOnBvaW50ZXI7XG59XG4iXX0= */"
+module.exports = ".side_bar{\n  background-color:#222222;\n  position: fixed;\n  top:0px;\n  width:27%;\n  height:100%;\n}\n\n.head{\n\n  background-color:#E2E2E2;\n  position: fixed;\n  width:27%;\n  height:50px;\n}\n\n.head > p{\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  display: inline-block;\n}\n\n.collection{\n  color: #222222;\n  float: left;\n  font-size: 28px;\n  margin-top: 9px;\n  margin-left: 10px;\n}\n\n.collections{\n  width:100%;\n  margin-top: 83px;\n}\n\n.collections_cell{\n  border-radius: 0px 32px 32px 0px;\n  margin-top: -16px;\n  width: 97%;\n  height: 35px;\n  background-color: white;\n}\n\n.collections_cell > input{\n  float: left;\n  height: 33px;\n  width: 285px;\n  border: none;\n}\n\n.collections_cell > p{\n  padding-top: 7px;\n  padding-left: 8px;\n  text-align: left;\n  font-size: 18px;\n}\n\n.add_collections{\n  float: right;\n  margin-right: 12px;\n  font-size: 40px;\n  margin-top: 0px;\n  cursor:pointer;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2lkZWJhci9zaWRlYmFyLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSx3QkFBd0I7RUFDeEIsZUFBZTtFQUNmLE9BQU87RUFDUCxTQUFTO0VBQ1QsV0FBVztBQUNiOztBQUVBOztFQUVFLHdCQUF3QjtFQUN4QixlQUFlO0VBQ2YsU0FBUztFQUNULFdBQVc7QUFDYjs7QUFFQTtFQUNFLHlCQUFpQjtLQUFqQixzQkFBaUI7TUFBakIscUJBQWlCO1VBQWpCLGlCQUFpQjtFQUNqQixxQkFBcUI7QUFDdkI7O0FBRUE7RUFDRSxjQUFjO0VBQ2QsV0FBVztFQUNYLGVBQWU7RUFDZixlQUFlO0VBQ2YsaUJBQWlCO0FBQ25COztBQUVBO0VBQ0UsVUFBVTtFQUNWLGdCQUFnQjtBQUNsQjs7QUFFQTtFQUNFLGdDQUFnQztFQUNoQyxpQkFBaUI7RUFDakIsVUFBVTtFQUNWLFlBQVk7RUFDWix1QkFBdUI7QUFDekI7O0FBRUE7RUFDRSxXQUFXO0VBQ1gsWUFBWTtFQUNaLFlBQVk7RUFDWixZQUFZO0FBQ2Q7O0FBRUE7RUFDRSxnQkFBZ0I7RUFDaEIsaUJBQWlCO0VBQ2pCLGdCQUFnQjtFQUNoQixlQUFlO0FBQ2pCOztBQUNBO0VBQ0UsWUFBWTtFQUNaLGtCQUFrQjtFQUNsQixlQUFlO0VBQ2YsZUFBZTtFQUNmLGNBQWM7QUFDaEIiLCJmaWxlIjoic3JjL2FwcC9zaWRlYmFyL3NpZGViYXIuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5zaWRlX2JhcntcbiAgYmFja2dyb3VuZC1jb2xvcjojMjIyMjIyO1xuICBwb3NpdGlvbjogZml4ZWQ7XG4gIHRvcDowcHg7XG4gIHdpZHRoOjI3JTtcbiAgaGVpZ2h0OjEwMCU7XG59XG5cbi5oZWFke1xuXG4gIGJhY2tncm91bmQtY29sb3I6I0UyRTJFMjtcbiAgcG9zaXRpb246IGZpeGVkO1xuICB3aWR0aDoyNyU7XG4gIGhlaWdodDo1MHB4O1xufVxuXG4uaGVhZCA+IHB7XG4gIHVzZXItc2VsZWN0OiBub25lO1xuICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XG59XG5cbi5jb2xsZWN0aW9ue1xuICBjb2xvcjogIzIyMjIyMjtcbiAgZmxvYXQ6IGxlZnQ7XG4gIGZvbnQtc2l6ZTogMjhweDtcbiAgbWFyZ2luLXRvcDogOXB4O1xuICBtYXJnaW4tbGVmdDogMTBweDtcbn1cblxuLmNvbGxlY3Rpb25ze1xuICB3aWR0aDoxMDAlO1xuICBtYXJnaW4tdG9wOiA4M3B4O1xufVxuXG4uY29sbGVjdGlvbnNfY2VsbHtcbiAgYm9yZGVyLXJhZGl1czogMHB4IDMycHggMzJweCAwcHg7XG4gIG1hcmdpbi10b3A6IC0xNnB4O1xuICB3aWR0aDogOTclO1xuICBoZWlnaHQ6IDM1cHg7XG4gIGJhY2tncm91bmQtY29sb3I6IHdoaXRlO1xufVxuXG4uY29sbGVjdGlvbnNfY2VsbCA+IGlucHV0e1xuICBmbG9hdDogbGVmdDtcbiAgaGVpZ2h0OiAzM3B4O1xuICB3aWR0aDogMjg1cHg7XG4gIGJvcmRlcjogbm9uZTtcbn1cblxuLmNvbGxlY3Rpb25zX2NlbGwgPiBwe1xuICBwYWRkaW5nLXRvcDogN3B4O1xuICBwYWRkaW5nLWxlZnQ6IDhweDtcbiAgdGV4dC1hbGlnbjogbGVmdDtcbiAgZm9udC1zaXplOiAxOHB4O1xufVxuLmFkZF9jb2xsZWN0aW9uc3tcbiAgZmxvYXQ6IHJpZ2h0O1xuICBtYXJnaW4tcmlnaHQ6IDEycHg7XG4gIGZvbnQtc2l6ZTogNDBweDtcbiAgbWFyZ2luLXRvcDogMHB4O1xuICBjdXJzb3I6cG9pbnRlcjtcbn1cbiJdfQ== */"
 
 /***/ }),
 
@@ -605,7 +736,7 @@ module.exports = ".side_bar{\n  background-color:#222222;\n  position: fixed;\n 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"side_bar\">\n  <div class=\"head\">\n    <p class=\"collection\">Collections</p>\n    <p class=\"add_collections\" (click)='AddCollection()'>+</p>\n  </div>\n  <div *ngIf=\"Collections\" class=\"collections\">\n    <div *ngFor=\"let key of keys()\" class=\"collections_cell\">\n      <input *ngIf=\"!key\" type=\"text\" (keyup.enter)='CreateCollection($event)' autofocus=\"autofocus\">\n      <p *ngIf=\"key\">{{key}}</p>\n\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"side_bar\">\n\n  <div class=\"head\">\n    <p class=\"collection\">Collections</p>\n    <p class=\"add_collections\" (click)='AddCollection()'>+</p>\n  </div>\n\n  <div *ngIf=\"Collections\" class=\"collections\">\n\n    <div *ngFor=\"let key of keys()\" class=\"collections_cell\" (click)=\"CollectionSelected(key)\">\n\n      <input *ngIf=\"!key\" type=\"text\" (keyup.enter)='CreateCollection($event)' autofocus=\"autofocus\">\n      <p *ngIf=\"key\">{{key}}</p>\n\n    </div>\n\n  </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -637,7 +768,10 @@ var SidebarComponent = /** @class */ (function () {
         this.Collections[''] = '';
     };
     SidebarComponent.prototype.CreateCollection = function (event) {
-        this.comp.CreateCollection(event.target.value);
+        this.comp.CreateCollection(event.target.value + ":");
+    };
+    SidebarComponent.prototype.CollectionSelected = function (collection) {
+        this.comp.UserSelectedCollection(collection);
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),

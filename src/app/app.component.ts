@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import {SearchComponent} from './search/search.component';
 import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [SearchComponent]
+  providers: []
 })
 export class AppComponent implements OnInit {
 
-  private accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
-  private collectionUrl = 'https://myfavemovies.herokuapp.com/api/collections';
-  constructor(private SearchComp: SearchComponent, private http: HttpClient) {}
+  private accessPointUrl = 'https://localhost:5001/api/users';
+  private collectionUrl = 'https://localhost:5001/api/collections';
+  private OMDBUrl = 'https://www.omdbapi.com/?apikey=6c3999b3&i=';
+  constructor( private http: HttpClient) {}
+  CurrentCollection;
+  SearchResults = [];
   Collections = {};
-  SearchResults;
   DisplayLogin = false;
   LoggedIn = false;
   error;
@@ -43,6 +44,7 @@ export class AppComponent implements OnInit {
         {headers: {'Content-Type': 'application/json'}}).subscribe(
         result => {
           this.Collections = result;
+          console.log(result);
         }
       );
     } catch (err) {
@@ -53,7 +55,7 @@ export class AppComponent implements OnInit {
     {this.DisplayLogin ? this.DisplayLogin = false : this.DisplayLogin = true; }
   }
   Clicked() {
-    this.SearchComp.ClearSearch();
+    this.SearchResults = [];
   }
   DismissLogin() {
     this.DisplayLogin = false;
@@ -128,5 +130,42 @@ export class AppComponent implements OnInit {
     } catch (err) {
       console.log(err);
     }
+  }
+  UserSelectedCollection(collection) {
+    this.Collections[collection].split(',').map(imdbID => {
+      if (imdbID !== '') {
+        this.FetchMovieFromOMDB(imdbID);
+      }
+    });
+  }
+  FetchMovieFromOMDB(imdbID) {
+    try {
+      this.http.get(
+        this.OMDBUrl + imdbID
+        ).subscribe(
+        result => {
+          if (result) {
+            if(!this.CurrentCollection) {
+              this.CurrentCollection = [];
+            }
+            this.CurrentCollection.push(result);
+          }
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  UpdateCollections(payload){
+    this.http.post(
+      this.collectionUrl,
+      JSON.stringify(payload),
+      {headers: {'Content-Type': 'application/json'}}).subscribe(
+        result => {
+          if (result === true) {
+            this.RetrieveCollections();
+          }
+        }
+    )
   }
 }

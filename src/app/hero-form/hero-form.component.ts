@@ -24,4 +24,7 @@ export class HeroFormComponent {
   Login() {
     this.comp.Login(this.Email, this.Pass);
   }
+  Dismiss() {
+    this.comp.DismissLogin();
+  }
 }

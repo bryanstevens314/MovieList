@@ -11,7 +11,9 @@ export class ContentComponent {
 
   constructor(private comp: AppComponent) { }
   @Input() public LoggedIn: boolean;
-  @Input() public Collections: boolean;
+  @Input() public Collections: object;
+  @Input() public SearchResults: Array<string>;
+  @Input() public CurrentCollection: Array<string>;
   Login() {
     this.comp.ReceiveMessage();
   }

@@ -61,6 +61,7 @@ namespace server.Controllers
         {
             try {
                 string uid = HttpContext.Session.GetString("uid");
+                Console.WriteLine("Hello User " + uid + " " + uid.GetType());
                 if(uid != ""){
                     return true;
                 }
@@ -163,10 +164,7 @@ namespace server.Controllers
         public void Delete()
         {
             try {
-                Console.WriteLine("BEFORE");
-                HttpContext.Session.Remove("uid");
-                string uid = HttpContext.Session.GetString("uid");
-                Console.WriteLine("AFTER " + uid);
+                HttpContext.Session.SetString("uid", "");
             }catch (Exception ex) {
                 Console.WriteLine("An error occured: " + ex.Message);
             }

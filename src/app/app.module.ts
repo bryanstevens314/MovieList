@@ -10,6 +10,7 @@ import { SearchComponent } from './search/search.component';
 import { ContentComponent } from './content/content.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { LoginSignupComponent } from './login-signup/login-signup.component';
+import { MovieViewComponent } from './movie-view/movie-view.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { LoginSignupComponent } from './login-signup/login-signup.component';
     SearchComponent,
     ContentComponent,
     SidebarComponent,
-    LoginSignupComponent
+    LoginSignupComponent,
+    MovieViewComponent
   ],
   imports: [
     BrowserModule,
