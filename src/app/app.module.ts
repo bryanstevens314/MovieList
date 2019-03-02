@@ -11,7 +11,7 @@ import { ContentComponent } from './content/content.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { LoginSignupComponent } from './login-signup/login-signup.component';
 import { MovieViewComponent } from './movie-view/movie-view.component';
-
+import { DeviceDetectorModule } from 'ngx-device-detector';
 @NgModule({
   declarations: [
     AppComponent,

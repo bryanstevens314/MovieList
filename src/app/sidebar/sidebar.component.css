@@ -25,6 +25,7 @@
   font-size: 28px;
   margin-top: 9px;
   margin-left: 10px;
+
 }
 
 .collections{
@@ -45,7 +46,7 @@
 .collections_cell > input{
   float: left;
   height: 33px;
-  width: 285px;
+  width: 83%;
   border: none;
 }
 
@@ -53,7 +54,7 @@
   padding-top: 7px;
   padding-left: 8px;
   text-align: left;
-  font-size: 18px;
+  font-size: 4vw;
 }
 .add_collections{
   float: right;

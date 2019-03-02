@@ -82,7 +82,7 @@ module.exports = "\n.main{\n  text-align:center;\n}\n\n\n\n\n\n/*# sourceMapping
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div *ngIf = \"!DisplayLogin\" class=\"main\" (click)=\"Clicked()\">\n    <app-sidebar [Collections] = \"Collections\"></app-sidebar>\n    <app-content [LoggedIn]=\"LoggedIn\" [Collections] = \"Collections\" [SearchResults] = \"SearchResults\" [CurrentCollection] = \"CurrentCollection\"></app-content>\n\n\n</div>\n<app-login-signup *ngIf = \"DisplayLogin\"></app-login-signup>\n\n<router-outlet> </router-outlet>\n"
+module.exports = "\n<div *ngIf = \"!DisplayLogin && isDesktopDevice\" class=\"main\" (click)=\"Clicked()\">\n    <app-sidebar [Collections] = \"Collections\"></app-sidebar>\n    <app-content [LoggedIn]=\"LoggedIn\" [Collections] = \"Collections\" [SearchResults] = \"SearchResults\" [CurrentCollection] = \"CurrentCollection\"></app-content>\n\n\n</div>\n<app-login-signup *ngIf = \"DisplayLogin\"></app-login-signup>\n\n<router-outlet> </router-outlet>\n"
 
 /***/ }),
 
@@ -99,12 +99,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var ngx_device_detector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ngx-device-detector */ "./node_modules/ngx-device-detector/ngx-device-detector.umd.js");
+/* harmony import */ var ngx_device_detector__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ngx_device_detector__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
 var AppComponent = /** @class */ (function () {
-    function AppComponent(http) {
+    function AppComponent(http, deviceService) {
         this.http = http;
+        this.deviceService = deviceService;
         this.accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
         this.collectionUrl = 'https://myfavemovies.herokuapp.com/api/collections';
         this.OMDBUrl = 'https://www.omdbapi.com/?apikey=6c3999b3&i=';
@@ -113,6 +117,7 @@ var AppComponent = /** @class */ (function () {
         this.Collections = {};
         this.DisplayLogin = false;
         this.LoggedIn = false;
+        this.isDesktopDevice = this.deviceService.isDesktop();
     }
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -275,7 +280,7 @@ var AppComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"], ngx_device_detector__WEBPACK_IMPORTED_MODULE_3__["DeviceDetectorService"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -307,6 +312,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sidebar_sidebar_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./sidebar/sidebar.component */ "./src/app/sidebar/sidebar.component.ts");
 /* harmony import */ var _login_signup_login_signup_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./login-signup/login-signup.component */ "./src/app/login-signup/login-signup.component.ts");
 /* harmony import */ var _movie_view_movie_view_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./movie-view/movie-view.component */ "./src/app/movie-view/movie-view.component.ts");
+/* harmony import */ var ngx_device_detector__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ngx-device-detector */ "./node_modules/ngx-device-detector/ngx-device-detector.umd.js");
+/* harmony import */ var ngx_device_detector__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(ngx_device_detector__WEBPACK_IMPORTED_MODULE_13__);
+
 
 
 
@@ -338,7 +346,8 @@ var AppModule = /** @class */ (function () {
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
                 _app_routing_module__WEBPACK_IMPORTED_MODULE_5__["AppRoutingModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
-                _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"]
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"],
+                ngx_device_detector__WEBPACK_IMPORTED_MODULE_13__["DeviceDetectorModule"].forRoot()
             ],
             providers: [],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"]]

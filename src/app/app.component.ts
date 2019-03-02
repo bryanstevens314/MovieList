@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { stringify } from '@angular/core/src/render3/util';
+import { DeviceDetectorService } from 'ngx-device-detector';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -12,12 +13,13 @@ export class AppComponent implements OnInit {
   private collectionUrl = 'https://myfavemovies.herokuapp.com/api/collections';
   private OMDBUrl = 'https://www.omdbapi.com/?apikey=6c3999b3&i=';
   private timer;
-  constructor( private http: HttpClient) {}
+  constructor( private http: HttpClient, private deviceService: DeviceDetectorService) {}
   CurrentCollection = {};
   SearchResults = [];
   Collections = {};
   DisplayLogin = false;
   LoggedIn = false;
+  isDesktopDevice = this.deviceService.isDesktop();
   error;
   ngOnInit() {
     try {
