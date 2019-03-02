@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { stringify } from '@angular/core/src/render3/util';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  providers: []
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
 
@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
   private collectionUrl = 'https://localhost:5001/api/collections';
   private OMDBUrl = 'https://www.omdbapi.com/?apikey=6c3999b3&i=';
   constructor( private http: HttpClient) {}
-  CurrentCollection;
+  CurrentCollection = {};
   SearchResults = [];
   Collections = {};
   DisplayLogin = false;
@@ -132,23 +132,22 @@ export class AppComponent implements OnInit {
     }
   }
   UserSelectedCollection(collection) {
+    this.CurrentCollection = {};
     this.Collections[collection].split(',').map(imdbID => {
       if (imdbID !== '') {
-        this.FetchMovieFromOMDB(imdbID);
+        this.FetchMovieFromOMDB(collection,imdbID);
       }
     });
   }
-  FetchMovieFromOMDB(imdbID) {
+  FetchMovieFromOMDB(collection, imdbID) {
     try {
-      this.http.get(
-        this.OMDBUrl + imdbID
-        ).subscribe(
+      this.http.get(this.OMDBUrl + imdbID).subscribe(
         result => {
           if (result) {
-            if(!this.CurrentCollection) {
-              this.CurrentCollection = [];
+            if (!this.CurrentCollection[collection]) {
+              this.CurrentCollection[collection] = [];
             }
-            this.CurrentCollection.push(result);
+            this.CurrentCollection[collection].push(result);
           }
         }
       );
@@ -156,7 +155,7 @@ export class AppComponent implements OnInit {
       console.log(err);
     }
   }
-  UpdateCollections(payload){
+  UpdateCollections(payload) {
     this.http.post(
       this.collectionUrl,
       JSON.stringify(payload),
@@ -166,6 +165,22 @@ export class AppComponent implements OnInit {
             this.RetrieveCollections();
           }
         }
-    )
+    );
+  }
+  RemoveMovie(imdbID) {
+    try {
+      const collection = Object.keys(this.CurrentCollection)[0];
+      const URL = `${this.collectionUrl}?collection=${collection}&imdbID=${imdbID}`;
+      this.http.delete(
+        URL,
+        {headers: {'Content-Type': 'application/json'}}).subscribe(
+        result => {
+          this.UserSelectedCollection(collection);
+          this.RetrieveCollections();
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

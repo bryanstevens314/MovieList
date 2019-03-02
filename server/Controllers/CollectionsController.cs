@@ -94,7 +94,8 @@ namespace server.Controllers
                         command.CommandText =
                         @"
                             INSERT INTO User_Movies (list_name, uid, imdbID)
-                            VALUES (@list_name, @uid, @imdbID);
+                            VALUES (@list_name, @uid, @imdbID)
+                            ORDER BY list_name DESC;
                         ";
                         string uid = HttpContext.Session.GetString("uid");
                         command.Parameters.AddWithValue("@list_name", payload[0]);
@@ -104,9 +105,9 @@ namespace server.Controllers
                     }
                 }
         }
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public ActionResult<string> Delete(int id)
+        // DELETE api/collections
+        [HttpDelete]
+        public bool Delete(string collection, string imdbID)
         {
             try {
                 using (var connection = new QC.SqlConnection(
@@ -118,15 +119,25 @@ namespace server.Controllers
 
                         command.Connection = connection;
                         command.CommandType = DT.CommandType.Text;
-                        command.CommandText = @"DELETE FROM User_Movies WHERE id = " + id + ";";
+                        command.CommandText =
+                        @"
+                            DELETE FROM User_Movies
+                            WHERE uid = @uid
+                                AND list_name = @list_name
+                                AND imdbID = @imdbID;
+                        ";
+                        string uid = HttpContext.Session.GetString("uid");
+                        command.Parameters.AddWithValue("@uid", uid);
+                        command.Parameters.AddWithValue("@list_name", collection);
+                        command.Parameters.AddWithValue("@imdbID", imdbID);
                         command.ExecuteNonQuery();
-                        return "";
+                        return true;
                     }
                 }
             }catch(Exception ex){
 
                 Console.WriteLine("An error occured: " + ex.Message);
-                return ex.Message;
+                return false;
 
             }
         }

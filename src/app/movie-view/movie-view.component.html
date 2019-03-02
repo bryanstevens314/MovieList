@@ -1,5 +1,9 @@
 <div class="movie_view">
-  <div *ngFor="let movie of CurrentCollection">
-    {{movie.Title}}
+  <div *ngFor="let value of Values()" class="movie_cell">
+    <img src={{value.Poster}}>
+    <p>{{value.Title}}</p>
+    <div class="delete_movie" (click)="RemoveMovie(value.imdbID)">
+      <h1 >X</h1>
+    </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {AppComponent} from '../app.component';
 
 @Component({
@@ -10,10 +10,10 @@ import {AppComponent} from '../app.component';
 export class ContentComponent {
 
   constructor(private comp: AppComponent) { }
-  @Input() public LoggedIn: boolean;
-  @Input() public Collections: object;
-  @Input() public SearchResults: Array<string>;
   @Input() public CurrentCollection: Array<string>;
+  @Input() public SearchResults: Array<string>;
+  @Input() public Collections: object;
+  @Input() public LoggedIn: boolean;
   Login() {
     this.comp.ReceiveMessage();
   }

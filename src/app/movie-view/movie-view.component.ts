@@ -1,15 +1,20 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import {AppComponent} from '../app.component';
 
 @Component({
   selector: 'app-movie-view',
   templateUrl: './movie-view.component.html',
   styleUrls: ['./movie-view.component.css']
 })
-export class MovieViewComponent implements OnInit {
+export class MovieViewComponent {
 
-  constructor() { }
-  @Input() public CurrentCollection: Array<string>;
-  ngOnInit() {
+  constructor(private comp: AppComponent) { }
+  @Input() public CurrentCollection: object;
+  Values(): Array<object> {
+    return Object.values(this.CurrentCollection)[0];
+  }
+  RemoveMovie(imdbID) {
+    this.comp.RemoveMovie(imdbID);
   }
 
 }

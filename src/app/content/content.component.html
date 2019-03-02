@@ -8,5 +8,5 @@
     <div class="logout" (click)='Logout()' *ngIf="LoggedIn" >
         <p>Logout</p>
     </div>
-    <app-movie-view *ngIf = "CurrentCollection" [CurrentCollection] = "CurrentCollection" ></app-movie-view>
+    <app-movie-view [CurrentCollection] = "CurrentCollection" ></app-movie-view>
 </div>
