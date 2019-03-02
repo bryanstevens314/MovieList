@@ -10,12 +10,15 @@ import {AppComponent} from '../app.component';
 export class SidebarComponent {
   constructor(private comp: AppComponent) { }
   @Input() public Collections: object;
+  @Input() public LoggedIn: boolean;
   AddingCollection = false;
   keys(): Array<string> {
     return Object.keys(this.Collections);
   }
   AddCollection() {
-    this.Collections[''] = '';
+    if (this.LoggedIn) {
+      this.Collections[''] = '';
+    }
   }
   CreateCollection(event) {
     this.comp.CreateCollection(`${event.target.value}:`);

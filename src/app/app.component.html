@@ -1,8 +1,7 @@
 
 <div *ngIf = "!DisplayLogin" class="main" (click)="Clicked()">
-    <app-sidebar [Collections] = "Collections"></app-sidebar>
+    <app-sidebar [Collections] = "Collections" [LoggedIn] = "LoggedIn"></app-sidebar>
     <app-content [LoggedIn]="LoggedIn" [Collections] = "Collections" [SearchResults] = "SearchResults" [CurrentCollection] = "CurrentCollection"></app-content>
 </div>
 <app-login-signup *ngIf = "DisplayLogin"></app-login-signup>
-<app-mobile-warning *ngIf = "!isDesktopDevice"></app-mobile-warning>
 <router-outlet> </router-outlet>
