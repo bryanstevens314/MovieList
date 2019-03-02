@@ -82,7 +82,7 @@ module.exports = "\n.main{\n  text-align:center;\n}\n\n\n\n\n\n/*# sourceMapping
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div *ngIf = \"!DisplayLogin\" class=\"main\" (click)=\"Clicked()\">\n    <app-sidebar [Collections] = \"Collections\"></app-sidebar>\n    <app-content [LoggedIn]=\"LoggedIn\" [Collections] = \"Collections\" [SearchResults] = \"SearchResults\" [CurrentCollection] = \"CurrentCollection\"></app-content>\n</div>\n<app-login-signup *ngIf = \"DisplayLogin\"></app-login-signup>\n<app-mobile-warning *ngIf = \"!isDesktopDevice\"></app-mobile-warning>\n<router-outlet> </router-outlet>\n"
+module.exports = "\n<div *ngIf = \"!DisplayLogin\" class=\"main\" (click)=\"Clicked()\">\n    <app-sidebar [Collections] = \"Collections\" [LoggedIn] = \"LoggedIn\"></app-sidebar>\n    <app-content [LoggedIn]=\"LoggedIn\" [Collections] = \"Collections\" [SearchResults] = \"SearchResults\" [CurrentCollection] = \"CurrentCollection\"></app-content>\n</div>\n<app-login-signup *ngIf = \"DisplayLogin\"></app-login-signup>\n<router-outlet> </router-outlet>\n"
 
 /***/ }),
 
@@ -105,8 +105,8 @@ __webpack_require__.r(__webpack_exports__);
 var AppComponent = /** @class */ (function () {
     function AppComponent(http) {
         this.http = http;
-        this.accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
-        this.collectionUrl = 'https://myfavemovies.herokuapp.com/api/collections';
+        this.accessPointUrl = 'https://myfavemovies.herokuapp.com /api/users';
+        this.collectionUrl = 'https://myfavemovies.herokuapp.com /api/collections';
         this.OMDBUrl = 'https://www.omdbapi.com/?apikey=6c3999b3&i=';
         this.CurrentCollection = {};
         this.SearchResults = [];
@@ -790,7 +790,9 @@ var SidebarComponent = /** @class */ (function () {
         return Object.keys(this.Collections);
     };
     SidebarComponent.prototype.AddCollection = function () {
-        this.Collections[''] = '';
+        if (this.LoggedIn === true) {
+            this.Collections[''] = '';
+        }
     };
     SidebarComponent.prototype.CreateCollection = function (event) {
         this.comp.CreateCollection(event.target.value + ":");
@@ -802,6 +804,10 @@ var SidebarComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
     ], SidebarComponent.prototype, "Collections", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Boolean)
+    ], SidebarComponent.prototype, "LoggedIn", void 0);
     SidebarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-sidebar',

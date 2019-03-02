@@ -8,8 +8,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent implements OnInit {
 
-  private accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
-  private collectionUrl = 'https://myfavemovies.herokuapp.com/api/collections';
+  private accessPointUrl = 'https://myfavemovies.herokuapp.com /api/users';
+  private collectionUrl = 'https://myfavemovies.herokuapp.com /api/collections';
   private OMDBUrl = 'https://www.omdbapi.com/?apikey=6c3999b3&i=';
   private timer;
   constructor( private http: HttpClient) {}

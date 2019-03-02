@@ -16,7 +16,7 @@ export class SidebarComponent {
     return Object.keys(this.Collections);
   }
   AddCollection() {
-    if (this.LoggedIn) {
+    if (this.LoggedIn === true) {
       this.Collections[''] = '';
     }
   }
