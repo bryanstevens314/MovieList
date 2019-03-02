@@ -94,8 +94,7 @@ namespace server.Controllers
                         command.CommandText =
                         @"
                             INSERT INTO User_Movies (list_name, uid, imdbID)
-                            VALUES (@list_name, @uid, @imdbID)
-                            ORDER BY list_name DESC;
+                            VALUES (@list_name, @uid, @imdbID);
                         ";
                         string uid = HttpContext.Session.GetString("uid");
                         command.Parameters.AddWithValue("@list_name", payload[0]);

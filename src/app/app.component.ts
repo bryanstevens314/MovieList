@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   private accessPointUrl = 'https://localhost:5001/api/users';
   private collectionUrl = 'https://localhost:5001/api/collections';
   private OMDBUrl = 'https://www.omdbapi.com/?apikey=6c3999b3&i=';
+  private timer;
   constructor( private http: HttpClient) {}
   CurrentCollection = {};
   SearchResults = [];
@@ -108,6 +109,7 @@ export class AppComponent implements OnInit {
         {headers: {'Content-Type': 'application/json'}}).subscribe(
         result => {
           this.Collections = {};
+          this.CurrentCollection = {};
           this.LoggedIn = false;
         }
       );
@@ -163,6 +165,11 @@ export class AppComponent implements OnInit {
         result => {
           if (result === true) {
             this.RetrieveCollections();
+            this.timer = setTimeout(() => {
+              const collection = Object.keys(this.CurrentCollection)[0];
+              this.UserSelectedCollection(collection);
+            }, 500);
+
           }
         }
     );
@@ -175,8 +182,10 @@ export class AppComponent implements OnInit {
         URL,
         {headers: {'Content-Type': 'application/json'}}).subscribe(
         result => {
-          this.UserSelectedCollection(collection);
           this.RetrieveCollections();
+          this.timer = setTimeout(() => {
+            this.UserSelectedCollection(collection);
+          }, 500);
         }
       );
     } catch (err) {

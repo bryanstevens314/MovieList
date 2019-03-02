@@ -13,7 +13,9 @@ id="search"/>
   <div *ngFor="let key of keys()" class="collection_cells">
     <input type="checkbox" name="collection" value={{key}}><label>{{key}}</label>
   </div>
-  <button type="submit" class="save_collection">Save</button>
+  <button type="submit" class="save_collection">
+    <p>Save</p>
+  </button>
 </form>
 
 <div *ngIf="SearchResults" class="search_results">
