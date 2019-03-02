@@ -82,7 +82,7 @@ module.exports = "\n.main{\n  text-align:center;\n}\n\n\n\n\n\n/*# sourceMapping
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<div *ngIf = \"!DisplayLogin && isDesktopDevice\" class=\"main\" (click)=\"Clicked()\">\n    <app-sidebar [Collections] = \"Collections\"></app-sidebar>\n    <app-content [LoggedIn]=\"LoggedIn\" [Collections] = \"Collections\" [SearchResults] = \"SearchResults\" [CurrentCollection] = \"CurrentCollection\"></app-content>\n\n\n</div>\n<app-login-signup *ngIf = \"DisplayLogin\"></app-login-signup>\n\n<router-outlet> </router-outlet>\n"
+module.exports = "\n<div *ngIf = \"!DisplayLogin\" class=\"main\" (click)=\"Clicked()\">\n    <app-sidebar [Collections] = \"Collections\"></app-sidebar>\n    <app-content [LoggedIn]=\"LoggedIn\" [Collections] = \"Collections\" [SearchResults] = \"SearchResults\" [CurrentCollection] = \"CurrentCollection\"></app-content>\n</div>\n<app-login-signup *ngIf = \"DisplayLogin\"></app-login-signup>\n<app-mobile-warning *ngIf = \"!isDesktopDevice\"></app-mobile-warning>\n<router-outlet> </router-outlet>\n"
 
 /***/ }),
 
@@ -99,16 +99,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var ngx_device_detector__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ngx-device-detector */ "./node_modules/ngx-device-detector/ngx-device-detector.umd.js");
-/* harmony import */ var ngx_device_detector__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ngx_device_detector__WEBPACK_IMPORTED_MODULE_3__);
-
 
 
 
 var AppComponent = /** @class */ (function () {
-    function AppComponent(http, deviceService) {
+    function AppComponent(http) {
         this.http = http;
-        this.deviceService = deviceService;
         this.accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
         this.collectionUrl = 'https://myfavemovies.herokuapp.com/api/collections';
         this.OMDBUrl = 'https://www.omdbapi.com/?apikey=6c3999b3&i=';
@@ -117,7 +113,6 @@ var AppComponent = /** @class */ (function () {
         this.Collections = {};
         this.DisplayLogin = false;
         this.LoggedIn = false;
-        this.isDesktopDevice = this.deviceService.isDesktop();
     }
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -280,7 +275,7 @@ var AppComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"], ngx_device_detector__WEBPACK_IMPORTED_MODULE_3__["DeviceDetectorService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -312,9 +307,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sidebar_sidebar_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./sidebar/sidebar.component */ "./src/app/sidebar/sidebar.component.ts");
 /* harmony import */ var _login_signup_login_signup_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./login-signup/login-signup.component */ "./src/app/login-signup/login-signup.component.ts");
 /* harmony import */ var _movie_view_movie_view_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./movie-view/movie-view.component */ "./src/app/movie-view/movie-view.component.ts");
-/* harmony import */ var ngx_device_detector__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ngx-device-detector */ "./node_modules/ngx-device-detector/ngx-device-detector.umd.js");
-/* harmony import */ var ngx_device_detector__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(ngx_device_detector__WEBPACK_IMPORTED_MODULE_13__);
-
 
 
 
@@ -346,8 +338,7 @@ var AppModule = /** @class */ (function () {
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
                 _app_routing_module__WEBPACK_IMPORTED_MODULE_5__["AppRoutingModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
-                _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"],
-                ngx_device_detector__WEBPACK_IMPORTED_MODULE_13__["DeviceDetectorModule"].forRoot()
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"]
             ],
             providers: [],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"]]
@@ -759,7 +750,7 @@ var SearchComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".side_bar{\n  background-color:#222222;\n  position: fixed;\n  top:0px;\n  width:27%;\n  height:100%;\n}\n\n.head{\n\n  background-color:#E2E2E2;\n  position: fixed;\n  width:27%;\n  height:50px;\n}\n\n.head > p{\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  display: inline-block;\n}\n\n.collection{\n  color: #222222;\n  float: left;\n  font-size: 28px;\n  margin-top: 9px;\n  margin-left: 10px;\n}\n\n.collections{\n  width:100%;\n  margin-top: 83px;\n}\n\n.collections_cell{\n  cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n  border-radius: 0px 32px 32px 0px;\n  margin-top: -16px;\n  width: 97%;\n  height: 35px;\n  background-color: white;\n}\n\n.collections_cell > input{\n  float: left;\n  height: 33px;\n  width: 285px;\n  border: none;\n}\n\n.collections_cell > p{\n  padding-top: 7px;\n  padding-left: 8px;\n  text-align: left;\n  font-size: 18px;\n}\n\n.add_collections{\n  float: right;\n  margin-right: 12px;\n  font-size: 40px;\n  margin-top: 0px;\n  cursor:pointer;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2lkZWJhci9zaWRlYmFyLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSx3QkFBd0I7RUFDeEIsZUFBZTtFQUNmLE9BQU87RUFDUCxTQUFTO0VBQ1QsV0FBVztBQUNiOztBQUVBOztFQUVFLHdCQUF3QjtFQUN4QixlQUFlO0VBQ2YsU0FBUztFQUNULFdBQVc7QUFDYjs7QUFFQTtFQUNFLHlCQUFpQjtLQUFqQixzQkFBaUI7TUFBakIscUJBQWlCO1VBQWpCLGlCQUFpQjtFQUNqQixxQkFBcUI7QUFDdkI7O0FBRUE7RUFDRSxjQUFjO0VBQ2QsV0FBVztFQUNYLGVBQWU7RUFDZixlQUFlO0VBQ2YsaUJBQWlCO0FBQ25COztBQUVBO0VBQ0UsVUFBVTtFQUNWLGdCQUFnQjtBQUNsQjs7QUFFQTtFQUNFLGVBQWU7SUFDYix5QkFBaUI7T0FBakIsc0JBQWlCO1FBQWpCLHFCQUFpQjtZQUFqQixpQkFBaUI7RUFDbkIsZ0NBQWdDO0VBQ2hDLGlCQUFpQjtFQUNqQixVQUFVO0VBQ1YsWUFBWTtFQUNaLHVCQUF1QjtBQUN6Qjs7QUFFQTtFQUNFLFdBQVc7RUFDWCxZQUFZO0VBQ1osWUFBWTtFQUNaLFlBQVk7QUFDZDs7QUFFQTtFQUNFLGdCQUFnQjtFQUNoQixpQkFBaUI7RUFDakIsZ0JBQWdCO0VBQ2hCLGVBQWU7QUFDakI7O0FBQ0E7RUFDRSxZQUFZO0VBQ1osa0JBQWtCO0VBQ2xCLGVBQWU7RUFDZixlQUFlO0VBQ2YsY0FBYztBQUNoQiIsImZpbGUiOiJzcmMvYXBwL3NpZGViYXIvc2lkZWJhci5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLnNpZGVfYmFye1xuICBiYWNrZ3JvdW5kLWNvbG9yOiMyMjIyMjI7XG4gIHBvc2l0aW9uOiBmaXhlZDtcbiAgdG9wOjBweDtcbiAgd2lkdGg6MjclO1xuICBoZWlnaHQ6MTAwJTtcbn1cblxuLmhlYWR7XG5cbiAgYmFja2dyb3VuZC1jb2xvcjojRTJFMkUyO1xuICBwb3NpdGlvbjogZml4ZWQ7XG4gIHdpZHRoOjI3JTtcbiAgaGVpZ2h0OjUwcHg7XG59XG5cbi5oZWFkID4gcHtcbiAgdXNlci1zZWxlY3Q6IG5vbmU7XG4gIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbn1cblxuLmNvbGxlY3Rpb257XG4gIGNvbG9yOiAjMjIyMjIyO1xuICBmbG9hdDogbGVmdDtcbiAgZm9udC1zaXplOiAyOHB4O1xuICBtYXJnaW4tdG9wOiA5cHg7XG4gIG1hcmdpbi1sZWZ0OiAxMHB4O1xufVxuXG4uY29sbGVjdGlvbnN7XG4gIHdpZHRoOjEwMCU7XG4gIG1hcmdpbi10b3A6IDgzcHg7XG59XG5cbi5jb2xsZWN0aW9uc19jZWxse1xuICBjdXJzb3I6IHBvaW50ZXI7XG4gICAgdXNlci1zZWxlY3Q6IG5vbmU7XG4gIGJvcmRlci1yYWRpdXM6IDBweCAzMnB4IDMycHggMHB4O1xuICBtYXJnaW4tdG9wOiAtMTZweDtcbiAgd2lkdGg6IDk3JTtcbiAgaGVpZ2h0OiAzNXB4O1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB3aGl0ZTtcbn1cblxuLmNvbGxlY3Rpb25zX2NlbGwgPiBpbnB1dHtcbiAgZmxvYXQ6IGxlZnQ7XG4gIGhlaWdodDogMzNweDtcbiAgd2lkdGg6IDI4NXB4O1xuICBib3JkZXI6IG5vbmU7XG59XG5cbi5jb2xsZWN0aW9uc19jZWxsID4gcHtcbiAgcGFkZGluZy10b3A6IDdweDtcbiAgcGFkZGluZy1sZWZ0OiA4cHg7XG4gIHRleHQtYWxpZ246IGxlZnQ7XG4gIGZvbnQtc2l6ZTogMThweDtcbn1cbi5hZGRfY29sbGVjdGlvbnN7XG4gIGZsb2F0OiByaWdodDtcbiAgbWFyZ2luLXJpZ2h0OiAxMnB4O1xuICBmb250LXNpemU6IDQwcHg7XG4gIG1hcmdpbi10b3A6IDBweDtcbiAgY3Vyc29yOnBvaW50ZXI7XG59XG4iXX0= */"
+module.exports = ".side_bar{\n  background-color:#222222;\n  position: fixed;\n  top:0px;\n  width:27%;\n  height:100%;\n}\n\n.head{\n\n  background-color:#E2E2E2;\n  position: fixed;\n  width:27%;\n  height:50px;\n}\n\n.head > p{\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  display: inline-block;\n}\n\n.collection{\n  color: #222222;\n  float: left;\n  font-size: 28px;\n  margin-top: 9px;\n  margin-left: 10px;\n\n}\n\n.collections{\n  width:100%;\n  margin-top: 83px;\n}\n\n.collections_cell{\n  cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n  border-radius: 0px 32px 32px 0px;\n  margin-top: -16px;\n  width: 97%;\n  height: 35px;\n  background-color: white;\n}\n\n.collections_cell > input{\n  float: left;\n  height: 33px;\n  width: 80%;\n  border: none;\n}\n\n.collections_cell > p{\n  padding-top: 7px;\n  padding-left: 8px;\n  text-align: left;\n  font-size: 4vw;\n}\n\n.add_collections{\n  float: right;\n  margin-right: 12px;\n  font-size: 40px;\n  margin-top: 0px;\n  cursor:pointer;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2lkZWJhci9zaWRlYmFyLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSx3QkFBd0I7RUFDeEIsZUFBZTtFQUNmLE9BQU87RUFDUCxTQUFTO0VBQ1QsV0FBVztBQUNiOztBQUVBOztFQUVFLHdCQUF3QjtFQUN4QixlQUFlO0VBQ2YsU0FBUztFQUNULFdBQVc7QUFDYjs7QUFFQTtFQUNFLHlCQUFpQjtLQUFqQixzQkFBaUI7TUFBakIscUJBQWlCO1VBQWpCLGlCQUFpQjtFQUNqQixxQkFBcUI7QUFDdkI7O0FBRUE7RUFDRSxjQUFjO0VBQ2QsV0FBVztFQUNYLGVBQWU7RUFDZixlQUFlO0VBQ2YsaUJBQWlCOztBQUVuQjs7QUFFQTtFQUNFLFVBQVU7RUFDVixnQkFBZ0I7QUFDbEI7O0FBRUE7RUFDRSxlQUFlO0lBQ2IseUJBQWlCO09BQWpCLHNCQUFpQjtRQUFqQixxQkFBaUI7WUFBakIsaUJBQWlCO0VBQ25CLGdDQUFnQztFQUNoQyxpQkFBaUI7RUFDakIsVUFBVTtFQUNWLFlBQVk7RUFDWix1QkFBdUI7QUFDekI7O0FBRUE7RUFDRSxXQUFXO0VBQ1gsWUFBWTtFQUNaLFVBQVU7RUFDVixZQUFZO0FBQ2Q7O0FBRUE7RUFDRSxnQkFBZ0I7RUFDaEIsaUJBQWlCO0VBQ2pCLGdCQUFnQjtFQUNoQixjQUFjO0FBQ2hCOztBQUNBO0VBQ0UsWUFBWTtFQUNaLGtCQUFrQjtFQUNsQixlQUFlO0VBQ2YsZUFBZTtFQUNmLGNBQWM7QUFDaEIiLCJmaWxlIjoic3JjL2FwcC9zaWRlYmFyL3NpZGViYXIuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5zaWRlX2JhcntcbiAgYmFja2dyb3VuZC1jb2xvcjojMjIyMjIyO1xuICBwb3NpdGlvbjogZml4ZWQ7XG4gIHRvcDowcHg7XG4gIHdpZHRoOjI3JTtcbiAgaGVpZ2h0OjEwMCU7XG59XG5cbi5oZWFke1xuXG4gIGJhY2tncm91bmQtY29sb3I6I0UyRTJFMjtcbiAgcG9zaXRpb246IGZpeGVkO1xuICB3aWR0aDoyNyU7XG4gIGhlaWdodDo1MHB4O1xufVxuXG4uaGVhZCA+IHB7XG4gIHVzZXItc2VsZWN0OiBub25lO1xuICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XG59XG5cbi5jb2xsZWN0aW9ue1xuICBjb2xvcjogIzIyMjIyMjtcbiAgZmxvYXQ6IGxlZnQ7XG4gIGZvbnQtc2l6ZTogMjhweDtcbiAgbWFyZ2luLXRvcDogOXB4O1xuICBtYXJnaW4tbGVmdDogMTBweDtcblxufVxuXG4uY29sbGVjdGlvbnN7XG4gIHdpZHRoOjEwMCU7XG4gIG1hcmdpbi10b3A6IDgzcHg7XG59XG5cbi5jb2xsZWN0aW9uc19jZWxse1xuICBjdXJzb3I6IHBvaW50ZXI7XG4gICAgdXNlci1zZWxlY3Q6IG5vbmU7XG4gIGJvcmRlci1yYWRpdXM6IDBweCAzMnB4IDMycHggMHB4O1xuICBtYXJnaW4tdG9wOiAtMTZweDtcbiAgd2lkdGg6IDk3JTtcbiAgaGVpZ2h0OiAzNXB4O1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB3aGl0ZTtcbn1cblxuLmNvbGxlY3Rpb25zX2NlbGwgPiBpbnB1dHtcbiAgZmxvYXQ6IGxlZnQ7XG4gIGhlaWdodDogMzNweDtcbiAgd2lkdGg6IDgwJTtcbiAgYm9yZGVyOiBub25lO1xufVxuXG4uY29sbGVjdGlvbnNfY2VsbCA+IHB7XG4gIHBhZGRpbmctdG9wOiA3cHg7XG4gIHBhZGRpbmctbGVmdDogOHB4O1xuICB0ZXh0LWFsaWduOiBsZWZ0O1xuICBmb250LXNpemU6IDR2dztcbn1cbi5hZGRfY29sbGVjdGlvbnN7XG4gIGZsb2F0OiByaWdodDtcbiAgbWFyZ2luLXJpZ2h0OiAxMnB4O1xuICBmb250LXNpemU6IDQwcHg7XG4gIG1hcmdpbi10b3A6IDBweDtcbiAgY3Vyc29yOnBvaW50ZXI7XG59XG4iXX0= */"
 
 /***/ }),
 

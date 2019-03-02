@@ -4,5 +4,5 @@
     <app-content [LoggedIn]="LoggedIn" [Collections] = "Collections" [SearchResults] = "SearchResults" [CurrentCollection] = "CurrentCollection"></app-content>
 </div>
 <app-login-signup *ngIf = "DisplayLogin"></app-login-signup>
-
+<app-mobile-warning *ngIf = "!isDesktopDevice"></app-mobile-warning>
 <router-outlet> </router-outlet>
