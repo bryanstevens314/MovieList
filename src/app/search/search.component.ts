@@ -29,14 +29,12 @@ export class SearchComponent {
     }
   }
   MovieClicked(id) {
-    console.log("HELLO ID " + id);
     this.SelectedMovie = id;
   }
   ClearSearch() {
     this.SearchResults = null;
   }
   SaveCollection(event) {
-    console.log(event);
     let payload = '';
     Object.values(event.target).map(element => {
       if (element['checked'] && element['checked'] === true) {

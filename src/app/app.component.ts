@@ -8,8 +8,8 @@ import { stringify } from '@angular/core/src/render3/util';
 })
 export class AppComponent implements OnInit {
 
-  private accessPointUrl = 'https://localhost:5001/api/users';
-  private collectionUrl = 'https://localhost:5001/api/collections';
+  private accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
+  private collectionUrl = 'https://myfavemovies.herokuapp.com/api/collections';
   private OMDBUrl = 'https://www.omdbapi.com/?apikey=6c3999b3&i=';
   private timer;
   constructor( private http: HttpClient) {}
@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
         this.accessPointUrl,
         {headers: {'Content-Type': 'application/json'}}).subscribe(
         result => {
-          console.log(result);
           if (result === true) {
             this.LoggedIn = true;
             this.RetrieveCollections();
@@ -45,7 +44,6 @@ export class AppComponent implements OnInit {
         {headers: {'Content-Type': 'application/json'}}).subscribe(
         result => {
           this.Collections = result;
-          console.log(result);
         }
       );
     } catch (err) {

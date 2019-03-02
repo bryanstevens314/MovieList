@@ -105,8 +105,8 @@ __webpack_require__.r(__webpack_exports__);
 var AppComponent = /** @class */ (function () {
     function AppComponent(http) {
         this.http = http;
-        this.accessPointUrl = 'https://localhost:5001/api/users';
-        this.collectionUrl = 'https://localhost:5001/api/collections';
+        this.accessPointUrl = 'https://myfavemovies.herokuapp.com/api/users';
+        this.collectionUrl = 'https://myfavemovies.herokuapp.com/api/collections';
         this.OMDBUrl = 'https://www.omdbapi.com/?apikey=6c3999b3&i=';
         this.CurrentCollection = {};
         this.SearchResults = [];
