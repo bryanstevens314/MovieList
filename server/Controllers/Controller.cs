@@ -20,7 +20,7 @@ namespace server.Controllers
         [HttpGet("index.html")]
         public void Redirect2()
         {
-            Response.Redirect ("https://myfavemovies.herokuapp.com /index.html");
+            Response.Redirect ("https://myfavemovies.herokuapp.com/index.html");
         }
     }
 }
